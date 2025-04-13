@@ -14,14 +14,14 @@
             type="search"
             name="q"
             class="search-input"
-            placeholder="Search products..."
-            aria-label="Search"
+            placeholder="{{ 'general.search.placeholder' | t }}"
+            aria-label="{{ 'general.search.title' | t }}"
             autocomplete="off"
           >
-          <button type="submit" class="search-submit" aria-label="Search">
+          <button type="submit" class="search-submit" aria-label="{{ 'general.search.title' | t }}">
             {% render 'icon-search' %}
           </button>
-        </div>
+        </d iv>
       </form>
       <button class="search-drawer-close" aria-label="Close search">
         {% render 'icon-close' %}
@@ -30,7 +30,7 @@
 
     <div class="search-results">
       <div class="search-results-products">
-        <h3 class="search-results-title">Products</h3>
+        <h3 class="search-results-title">{{ 'products.general.title' | t }}</h3>
         <div class="search-results-grid"></div>
       </div>
 
@@ -47,15 +47,15 @@
 
     <div class="search-loading">
       <div class="search-loading-spinner"></div>
-      <p class="search-loading-text">Searching...</p>
+      <p class="search-loading-text">{{ 'general.search.loading' | t }}</p>
     </div>
 
     <div class="search-empty">
       <div class="search-empty-icon">
         {% render 'icon-search' %}
       </div>
-      <p class="search-empty-text">No results found</p>
-      <p class="search-empty-subtext">Try checking your spelling or using more general terms</p>
+      <p class="search-empty-text">{{ 'general.search.no_results' | t }}</p>
+      <p class="search-empty-subtext">{{ 'general.search.try_again' | t }}</p>
     </div>
   </div>
 </div> 

@@ -8,7 +8,7 @@
   
   <div class="cart-drawer-content">
     <div class="cart-drawer-header">
-      <h2 class="cart-drawer-title">Your Cart</h2>
+      <h2 class="cart-drawer-title">{{ 'general.cart.title' | t }}</h2>
       <button class="cart-drawer-close" aria-label="Close cart">
         {% render 'icon-close' %}
       </button>
@@ -51,7 +51,7 @@
 
                   <div class="cart-item-quantity">
                     <div class="quantity-selector">
-                      <button type="button" class="quantity-decrease" aria-label="Decrease quantity">-</button>
+                      <button type="button" class="quantity-decrease" aria-label="{{ 'general.cart.quantity' | t }}">-</button>
                       <input
                         type="number"
                         name="updates[]"
@@ -61,7 +61,7 @@
                         class="quantity-input"
                         data-item-key="{{ item.key }}"
                       >
-                      <button type="button" class="quantity-increase" aria-label="Increase quantity">+</button>
+                      <button type="button" class="quantity-increase" aria-label="{{ 'general.cart.quantity' | t }}">+</button>
                     </div>
                   </div>
                 </div>
@@ -71,27 +71,27 @@
 
           <div class="cart-drawer-footer">
             <div class="cart-subtotal">
-              <span class="cart-subtotal-label">Subtotal</span>
+              <span class="cart-subtotal-label">{{ 'general.cart.subtotal' | t }}</span>
               <span class="cart-subtotal-price">{{ cart.total_price | money }}</span>
             </div>
 
             <div class="cart-buttons">
               <button type="submit" class="btn btn-primary cart-checkout-button">
-                Checkout
+                {{ 'general.cart.checkout' | t }}
               </button>
               <a href="/cart" class="btn btn-secondary cart-view-button">
-                View Cart
+                {{ 'general.cart.title' | t }}
               </a>
             </div>
-          </div>
+          </div> 
         </form>
       {% else %}
         <div class="cart-empty">
           <div class="cart-empty-icon">
             {% render 'icon-cart' %}
           </div>
-          <p class="cart-empty-text">Your cart is empty</p>
-          <a href="/collections/all" class="btn btn-primary">Continue Shopping</a>
+          <p class="cart-empty-text">{{ 'general.cart.empty' | t }}</p>
+          <a href="/collections/all" class="btn btn-primary">{{ 'general.cart.continue_shopping' | t }}</a>
         </div>
       {% endif %}
     </div>
