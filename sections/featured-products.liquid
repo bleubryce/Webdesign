@@ -1,22 +1,25 @@
 {% comment %}
-  Featured Products Section for Get Up & Down Golf Shopify Theme
+er all   Featured Products Section for Get Up & Down Golf Shopify Theme
   - Displays a curated selection of products in a grid or slider format
 {% endcomment %}
 
-<div class="featured-products section" style="background-color: {{ section.settings.background_color }};">
+{% comment %}
+  Featured Products Section for Get Up & Down Golf Shopify Theme
+  - Displays a curated selection of products in a grid
+{% endcomment %}
+
+<div class="featured-products section">
   <div class="container">
-    {% if section.settings.title != blank %}
-      <h2 class="section-title" style="color: {{ section.settings.title_color }};">{{ section.settings.title }}</h2>
-    {% endif %}
-    
-    {% if section.settings.subtitle != blank %}
-      <div class="section-subtitle" style="color: {{ section.settings.title_color }};">{{ section.settings.subtitle }}</div>
-    {% endif %}
-    
-    <div class="featured-products-wrapper {% if section.settings.enable_slider %}featured-products-slider{% else %}featured-products-grid{% endif %}">
-      {% if section.settings.enable_slider %}
-        <div class="featured-products-slider-container">
-          <div class="featured-products-slides">
+    <h2 class="featured-products-title">Featured Products</h2>
+    <p class="featured-products-description">Shop our most popular items</p>
+
+    <div class="featured-products-grid">
+      {% assign products = collections.all.products | limit: 4 %}
+      
+      {% if products.size > 0 %}
+        {% for product in products %}
+          <div class="featured-product">
+            <a href="{{ product.url }}">
       {% endif %}
       
       {% assign collection = collections[section.settings.collection] %}
