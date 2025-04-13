@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Add to cart functionality
   setupAddToCartForms();
+  initHeroVideo();
 });
 
 // Header functionality
@@ -651,6 +652,20 @@ function initAnimations() {
     });
   }
 }
+
+// Hero video functionality
+function initHeroVideo() {
+  const heroSection = document.querySelector('.hero');
+  if (!heroSection) return;
+
+  const video = heroSection.querySelector('.hero-video');
+  const playButton = heroSection.querySelector('.hero-button');
+
+  if (video && playButton) {
+    playButton.addEventListener('click', () => video.play());
+  }
+}
+
 
 // Cart Drawer Functionality
 class CartDrawer {

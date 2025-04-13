@@ -2,121 +2,62 @@
   Featured Collections Section
 {% endcomment %}
 
-<div class="featured-collections section">
+<div class="featured-collections section container">
   <div class="container">
-    {% if section.settings.title != blank %}
-      <h2 class="section-title">{{ section.settings.title }}</h2>
+    <h2 class="featured-collection-title">Shop by category</h2>
+
+    {% assign collections_to_show = '' | split: ',' %}
+    {% if section.settings.collection_1 != blank %}
+      {% assign collections_to_show = collections_to_show | push: section.settings.collection_1 %}
     {% endif %}
-
-    {% if section.settings.subtitle != blank %}
-      <div class="section-subtitle">{{ section.settings.subtitle }}</div>
+    {% if section.settings.collection_2 != blank %}
+      {% assign collections_to_show = collections_to_show | push: section.settings.collection_2 %}
     {% endif %}
-
-    <div class="featured-collections-grid grid-{{ section.blocks.size }}">
-      {% for block in section.blocks %}
-        {% assign collection = collections[block.settings.collection] %}
-        {% if collection != blank %}
-          <div class="featured-collection-item" {{ block.shopify_attributes }}>
-            <a href="{{ collection.url }}" class="featured-collection-link">
-              {% if collection.image != blank %}
-                <div class="featured-collection-image">
-                  <img
-                    srcset="{% if collection.image.width >= 375 %}{{ collection.image | image_url: width: 375 }} 375w,{% endif %}
-                      {% if collection.image.width >= 720 %}{{ collection.image | image_url: width: 720 }} 720w,{% endif %}
-                      {% if collection.image.width >= 1080 %}{{ collection.image | image_url: width: 1080 }} 1080w,{% endif %}
-                      {{ collection.image | image_url }} {{ collection.image.width }}w"
-                    src="{{ collection.image | image_url: width: 720 }}"
-                    alt="{{ collection.title | escape }}"
-                    width="{{ collection.image.width }}"
-                    height="{{ collection.image.height }}"
-                    loading="lazy"
-                  >
-                </div>
-              {% else %}
-                <div class="featured-collection-image placeholder">
-                  {{ 'collection-1' | placeholder_svg_tag: 'placeholder-svg' }}
-                </div>
-              {% endif %}
-
-              <div class="featured-collection-content">
-                <h3 class="featured-collection-title">{{ collection.title }}</h3>
-                {% if block.settings.show_description and collection.description != blank %}
-                  <div class="featured-collection-description">{{ collection.description }}</div>
-                {% endif %}
-                {% if block.settings.show_button %}
-                  <span class="btn btn-secondary">{{ block.settings.button_label | default: 'Shop Now' }}</span>
-                {% endif %}
-              </div>
-            </a>
-          </div>
-        {% endif %}
-      {% endfor %}
-    </div>
+    {% if section.settings.collection_3 != blank %}
+      {% assign collections_to_show = collections_to_show | push: section.settings.collection_3 %}
+    {% endif %}
+  
+    {% for collection_handle in collections_to_show %}
+      {% assign collection = collections[collection_handle] %}
+      {% if collection.handle != blank %}
+        <div class="featured-collection">
+          <a href="{{ collection.url }}">
+            <img src="{{ collection.image | default: collection.products.first.featured_image | img_url: 'master' }}" alt="{{ collection.title }}" class="collection-image">
+            <h3 class="collection-title">{{ collection.title }}</h3>
+            <button class="collection-button">Shop</button>
+          </a>
+        </div>
+      {% endif %}
+    {% endfor %}
   </div>
 </div>
 
 {% schema %}
 {
   "name": "Featured Collections",
+  "blocks": [],
   "settings": [
     {
-      "type": "text",
-      "id": "title",
-      "label": "Heading",
-      "default": "Featured Collections"
+      "id": "collection_1",
+      "type": "collection",
+      "label": "Collection 1"
     },
     {
-      "type": "text",
-      "id": "subtitle",
-      "label": "Subheading"
-    }
-  ],
-  "blocks": [
-    {
+      "id": "collection_2",
       "type": "collection",
-      "name": "Collection",
-      "settings": [
-        {
-          "type": "collection",
-          "id": "collection",
-          "label": "Collection"
-        },
-        {
-          "type": "checkbox",
-          "id": "show_description",
-          "label": "Show description",
-          "default": true
-        },
-        {
-          "type": "checkbox",
-          "id": "show_button",
-          "label": "Show button",
-          "default": true
-        },
-        {
-          "type": "text",
-          "id": "button_label",
-          "label": "Button label",
-          "default": "Shop Now"
-        }
-      ]
+      "label": "Collection 2"
+    },
+    {
+      "id": "collection_3",
+      "type": "collection",
+      "label": "Collection 3"
     }
   ],
   "presets": [
     {
       "name": "Featured Collections",
-      "blocks": [
-        {
-          "type": "collection"
-        },
-        {
-          "type": "collection"
-        },
-        {
-          "type": "collection"
-        }
-      ]
+      "settings": {}
     }
   ]
 }
-{% endschema %} 
+{% endschema %}
