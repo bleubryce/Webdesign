@@ -6,9 +6,10 @@
 <div class="hero-section {% if section.settings.full_height %}hero-full-height{% endif %}" style="background-color: {{ section.settings.background_color }};">
   {% if section.settings.video_url != blank and section.settings.show_video %}
     <div class="hero-video-container">
-      <video class="hero-video" autoplay muted loop playsinline poster="{{ section.settings.image | img_url: 'master' }}">
+      <video class="hero-video" autoplay muted loop playsinline poster="{{ section.settings.image | img_url: 'master' }}" id="hero-video">
         <source src="{{ section.settings.video_url }}" type="video/mp4">
       </video>
+      <button class="play-button" onclick="togglePlay()">&#9658;</button>
     </div>
   {% elsif section.settings.image != blank %}
     <div class="hero-image-container">
@@ -48,6 +49,12 @@
         </div>
       {% endif %}
       
+      {% if section.settings.button_label == blank %}
+        {% assign button_label = 'GET 10% OFF' %}
+      {% else %}
+        {% assign button_label = section.settings.button_label %}
+      {% endif %}
+      
       {% if section.settings.button_label != blank %}
         <a href="{{ section.settings.button_link }}" class="btn btn-primary hero-button">
           {{ section.settings.button_label }}
@@ -60,6 +67,14 @@
         </a>
       {% endif %}
     </div>
+  </div>
+</div>
+
+<script>
+  function togglePlay() {
+    var video = document.getElementById("hero-video");
+    if (video.paused) video.play();
+    else video.pause();
   </div>
 </div>
 
@@ -163,7 +178,7 @@
     {
       "type": "text",
       "id": "button_label",
-      "label": "Button label",
+      "label": "Button label",      
       "default": "SHOP NOW"
     },
     {
