@@ -16,6 +16,7 @@
       "results_for": "Results for",
       "try_again": "Please try another search."
     },
+   
     "cart": {
       "title": "Shopping Cart",
       "empty": "Your cart is currently empty.",
@@ -66,6 +67,11 @@
       "payment_methods": "Payment methods accepted"
     }
   },
+  "general": {
+       "search": {
+           "loading": "Loading..."
+    }
+  },
   "products": {
     "product": {
       "add_to_cart": "Add to Cart",
@@ -76,6 +82,11 @@
       "from_price_html": "From {{ price }}",
       "regular_price": "Regular price",
       "sale_price": "Sale price"
+    }
+  },
+  "products": {
+    "general": {
+      "title": "Products"
     }
   },
   "collections": {
