@@ -1,0 +1,446 @@
+{% comment %}
+  Blog Template for Get Up & Down Golf Shopify Theme
+  - Displays blog posts with featured image, title, excerpt, and metadata
+{% endcomment %}
+
+<div class="blog-template section">
+  <div class="container">
+    {% if section.settings.show_breadcrumbs %}
+      <div class="blog-breadcrumbs">
+        <a href="/" class="blog-breadcrumb-link">Home</a>
+        <span class="blog-breadcrumb-separator">/</span>
+        <a href="/blogs/{{ blog.handle }}" class="blog-breadcrumb-link">{{ blog.title }}</a>
+        {% if current_tags %}
+          <span class="blog-breadcrumb-separator">/</span>
+          <span class="blog-breadcrumb-current">{{ current_tags.first }}</span>
+        {% endif %}
+      </div>
+    {% endif %}
+    
+    <div class="blog-header">
+      <h1 class="blog-title">{{ blog.title }}</h1>
+      
+      {% if section.settings.show_blog_description and blog.metafields.description != blank %}
+        <div class="blog-description rte">
+          {{ blog.metafields.description.value }}
+        </div>
+      {% endif %}
+    </div>
+    
+    <div class="blog-content">
+      <div class="blog-main">
+        {% paginate blog.articles by section.settings.posts_per_page %}
+          <div class="blog-articles">
+            {% for article in blog.articles %}
+              <div class="blog-article">
+                <div class="blog-article-inner">
+                  {% if article.image %}
+                    <div class="blog-article-image-wrapper">
+                      <a href="{{ article.url }}" class="blog-article-image-link">
+                        <img 
+                          srcset="{% if article.image.width >= 200 %}{{ article.image | img_url: '200x' }} 200w,{% endif %}
+                                  {% if article.image.width >= 400 %}{{ article.image | img_url: '400x' }} 400w,{% endif %}
+                                  {% if article.image.width >= 600 %}{{ article.image | img_url: '600x' }} 600w,{% endif %}
+                                  {% if article.image.width >= 800 %}{{ article.image | img_url: '800x' }} 800w,{% endif %}
+                                  {{ article.image | img_url: 'master' }} {{ article.image.width }}w"
+                          src="{{ article.image | img_url: '600x' }}"
+                          sizes="(min-width: 1200px) 33vw, (min-width: 750px) 50vw, 100vw"
+                          alt="{{ article.title | escape }}"
+                          loading="lazy"
+                          width="{{ article.image.width }}"
+                          height="{{ article.image.height }}"
+                          class="blog-article-image"
+                        >
+                      </a>
+                    </div>
+                  {% endif %}
+                  
+                  <div class="blog-article-content">
+                    <div class="blog-article-meta">
+                      {% if section.settings.show_date %}
+                        <span class="blog-article-date">{{ article.published_at | date: format: 'abbreviated_date' }}</span>
+                      {% endif %}
+                      
+                      {% if section.settings.show_author and article.author != blank %}
+                        <span class="blog-article-author">by {{ article.author }}</span>
+                      {% endif %}
+                      
+                      {% if section.settings.show_comments and blog.comments_enabled? %}
+                        <span class="blog-article-comments">
+                          <a href="{{ article.url }}#comments">
+                            {{ article.comments_count }} {{ article.comments_count | pluralize: 'comment', 'comments' }}
+                          </a>
+                        </span>
+                      {% endif %}
+                    </div>
+                    
+                    <h2 class="blog-article-title">
+                      <a href="{{ article.url }}">{{ article.title }}</a>
+                    </h2>
+                    
+                    {% if section.settings.show_excerpt %}
+                      <div class="blog-article-excerpt rte">
+                        {% if article.excerpt != blank %}
+                          {{ article.excerpt }}
+                        {% else %}
+                          {{ article.content | strip_html | truncatewords: 30 }}
+                        {% endif %}
+                      </div>
+                    {% endif %}
+                    
+                    {% if article.tags.size > 0 and section.settings.show_tags %}
+                      <div class="blog-article-tags">
+                        {% for tag in article.tags %}
+                          <a href="{{ blog.url }}/tagged/{{ tag | handle }}" class="blog-article-tag">{{ tag }}</a>
+                        {% endfor %}
+                      </div>
+                    {% endif %}
+                    
+                    <div class="blog-article-footer">
+                      <a href="{{ article.url }}" class="blog-article-read-more">
+                        {{ section.settings.read_more_text }}
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% else %}
+              <div class="blog-empty">
+                <p>No articles found</p>
+              </div>
+            {% endfor %}
+          </div>
+          
+          {% if paginate.pages > 1 %}
+            <div class="blog-pagination">
+              <nav class="pagination" role="navigation" aria-label="Pagination">
+                {% if paginate.previous %}
+                  <a href="{{ paginate.previous.url }}" class="pagination-prev">
+                    {% render 'icon-chevron-left' %}
+                    Previous
+                  </a>
+                {% else %}
+                  <span class="pagination-prev disabled">
+                    {% render 'icon-chevron-left' %}
+                    Previous
+                  </span>
+                {% endif %}
+                
+                <ul class="pagination-list">
+                  {% for part in paginate.parts %}
+                    {% if part.is_link %}
+                      <li>
+                        <a href="{{ part.url }}" class="pagination-link">{{ part.title }}</a>
+                      </li>
+                    {% else %}
+                      {% if part.title == paginate.current_page %}
+                        <li>
+                          <span class="pagination-link current">{{ part.title }}</span>
+                        </li>
+                      {% else %}
+                        <li>
+                          <span class="pagination-ellipsis">{{ part.title }}</span>
+                        </li>
+                      {% endif %}
+                    {% endif %}
+                  {% endfor %}
+                </ul>
+                
+                {% if paginate.next %}
+                  <a href="{{ paginate.next.url }}" class="pagination-next">
+                    Next
+                    {% render 'icon-chevron-right' %}
+                  </a>
+                {% else %}
+                  <span class="pagination-next disabled">
+                    Next
+                    {% render 'icon-chevron-right' %}
+                  </span>
+                {% endif %}
+              </nav>
+            </div>
+          {% endif %}
+        {% endpaginate %}
+      </div>
+      
+      {% if section.settings.show_sidebar %}
+        <div class="blog-sidebar">
+          {% if section.settings.show_search %}
+            <div class="blog-sidebar-section blog-search">
+              <h3 class="blog-sidebar-title">{{ section.settings.search_title }}</h3>
+              <form action="/search" method="get" class="blog-search-form" role="search">
+                <input type="hidden" name="type" value="article">
+                <input type="hidden" name="options[prefix]" value="last">
+                <div class="blog-search-field">
+                  <input type="search" name="q" placeholder="{{ section.settings.search_placeholder }}" class="blog-search-input" aria-label="{{ section.settings.search_placeholder }}">
+                  <button type="submit" class="blog-search-submit" aria-label="Search">
+                    {% render 'icon-search' %}
+                  </button>
+                </div>
+              </form>
+            </div>
+          {% endif %}
+          
+          {% if section.settings.show_recent_posts %}
+            <div class="blog-sidebar-section blog-recent-posts">
+              <h3 class="blog-sidebar-title">{{ section.settings.recent_posts_title }}</h3>
+              <ul class="blog-recent-posts-list">
+                {% for article in blog.articles limit: section.settings.recent_posts_count %}
+                  <li class="blog-recent-post">
+                    <a href="{{ article.url }}" class="blog-recent-post-link">
+                      {% if article.image and section.settings.show_recent_posts_images %}
+                        <div class="blog-recent-post-image">
+                          <img 
+                            src="{{ article.image | img_url: '100x100', crop: 'center' }}"
+                            alt="{{ article.title | escape }}"
+                            loading="lazy"
+                            width="50"
+                            height="50"
+                          >
+                        </div>
+                      {% endif %}
+                      <div class="blog-recent-post-content">
+                        <h4 class="blog-recent-post-title">{{ article.title }}</h4>
+                        {% if section.settings.show_date %}
+                          <span class="blog-recent-post-date">{{ article.published_at | date: format: 'abbreviated_date' }}</span>
+                        {% endif %}
+                      </div>
+                    </a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
+          
+          {% if blog.all_tags.size > 0 and section.settings.show_tags_list %}
+            <div class="blog-sidebar-section blog-tags">
+              <h3 class="blog-sidebar-title">{{ section.settings.tags_title }}</h3>
+              <ul class="blog-tags-list">
+                {% for tag in blog.all_tags %}
+                  <li class="blog-tag-item">
+                    <a href="{{ blog.url }}/tagged/{{ tag | handle }}" class="blog-tag-link {% if current_tags contains tag %}active{% endif %}">
+                      {{ tag }}
+                    </a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
+          
+          {% if section.settings.show_categories and linklists[section.settings.blog_categories_menu] != blank %}
+            <div class="blog-sidebar-section blog-categories">
+              <h3 class="blog-sidebar-title">{{ section.settings.categories_title }}</h3>
+              <ul class="blog-categories-list">
+                {% for link in linklists[section.settings.blog_categories_menu].links %}
+                  <li class="blog-category-item">
+                    <a href="{{ link.url }}" class="blog-category-link {% if link.active %}active{% endif %}">
+                      {{ link.title }}
+                    </a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
+          
+          {% if section.settings.show_social %}
+            <div class="blog-sidebar-section blog-social">
+              <h3 class="blog-sidebar-title">{{ section.settings.social_title }}</h3>
+              <div class="blog-social-links">
+                {% if settings.social_facebook_link != blank %}
+                  <a href="{{ settings.social_facebook_link }}" class="blog-social-link" target="_blank" rel="noopener" aria-label="Facebook">
+                    {% render 'icon-facebook' %}
+                  </a>
+                {% endif %}
+                
+                {% if settings.social_instagram_link != blank %}
+                  <a href="{{ settings.social_instagram_link }}" class="blog-social-link" target="_blank" rel="noopener" aria-label="Instagram">
+                    {% render 'icon-instagram' %}
+                  </a>
+                {% endif %}
+                
+                {% if settings.social_twitter_link != blank %}
+                  <a href="{{ settings.social_twitter_link }}" class="blog-social-link" target="_blank" rel="noopener" aria-label="Twitter">
+                    {% render 'icon-twitter' %}
+                  </a>
+                {% endif %}
+                
+                {% if settings.social_youtube_link != blank %}
+                  <a href="{{ settings.social_youtube_link }}" class="blog-social-link" target="_blank" rel="noopener" aria-label="YouTube">
+                    {% render 'icon-youtube' %}
+                  </a>
+                {% endif %}
+              </div>
+            </div>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Blog Pages",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_breadcrumbs",
+      "label": "Show breadcrumbs",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_blog_description",
+      "label": "Show blog description",
+      "default": true,
+      "info": "Add a description using metafields"
+    },
+    {
+      "type": "header",
+      "content": "Articles"
+    },
+    {
+      "type": "range",
+      "id": "posts_per_page",
+      "min": 3,
+      "max": 24,
+      "step": 3,
+      "label": "Posts per page",
+      "default": 9
+    },
+    {
+      "type": "checkbox",
+      "id": "show_date",
+      "label": "Show date",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_author",
+      "label": "Show author",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_comments",
+      "label": "Show comment count",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_excerpt",
+      "label": "Show excerpt",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tags",
+      "label": "Show article tags",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "read_more_text",
+      "label": "Read more text",
+      "default": "Read more"
+    },
+    {
+      "type": "header",
+      "content": "Sidebar"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sidebar",
+      "label": "Show sidebar",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_search",
+      "label": "Show search",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "search_title",
+      "label": "Search title",
+      "default": "Search"
+    },
+    {
+      "type": "text",
+      "id": "search_placeholder",
+      "label": "Search placeholder",
+      "default": "Search articles..."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_recent_posts",
+      "label": "Show recent posts",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "recent_posts_title",
+      "label": "Recent posts title",
+      "default": "Recent Posts"
+    },
+    {
+      "type": "range",
+      "id": "recent_posts_count",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "label": "Number of recent posts",
+      "default": 5
+    },
+    {
+      "type": "checkbox",
+      "id": "show_recent_posts_images",
+      "label": "Show images in recent posts",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tags_list",
+      "label": "Show tags list",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "tags_title",
+      "label": "Tags title",
+      "default": "Tags"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_categories",
+      "label": "Show categories",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "categories_title",
+      "label": "Categories title",
+      "default": "Categories"
+    },
+    {
+      "type": "link_list",
+      "id": "blog_categories_menu",
+      "label": "Categories menu",
+      "info": "Create a menu with links to your blog categories"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social",
+      "label": "Show social links",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "social_title",
+      "label": "Social title",
+      "default": "Follow Us"
+    }
+  ]
+}
+{% endschema %}

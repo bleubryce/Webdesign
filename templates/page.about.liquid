@@ -1,0 +1,765 @@
+{% comment %}
+  About Us Template for Get Up & Down Golf Shopify Theme
+  - Displays brand story, founder information, and company values
+{% endcomment %}
+
+<div class="about-us-template section">
+  <div class="container">
+    {% if section.settings.show_breadcrumbs %}
+      <div class="about-breadcrumbs">
+        <a href="/" class="about-breadcrumb-link">Home</a>
+        <span class="about-breadcrumb-separator">/</span>
+        <span class="about-breadcrumb-current">About Us</span>
+      </div>
+    {% endif %}
+    
+    <div class="about-header">
+      <h1 class="about-title">{{ section.settings.title }}</h1>
+      
+      {% if section.settings.subtitle != blank %}
+        <div class="about-subtitle">{{ section.settings.subtitle }}</div>
+      {% endif %}
+    </div>
+    
+    <div class="about-content">
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'hero_image' %}
+            <div class="about-hero-section" {{ block.shopify_attributes }}>
+              {% if block.settings.image != blank %}
+                <div class="about-hero-image-wrapper">
+                  <img 
+                    srcset="{% if block.settings.image.width >= 375 %}{{ block.settings.image | img_url: '375x' }} 375w,{% endif %}
+                            {% if block.settings.image.width >= 720 %}{{ block.settings.image | img_url: '720x' }} 720w,{% endif %}
+                            {% if block.settings.image.width >= 1080 %}{{ block.settings.image | img_url: '1080x' }} 1080w,{% endif %}
+                            {% if block.settings.image.width >= 1500 %}{{ block.settings.image | img_url: '1500x' }} 1500w,{% endif %}
+                            {{ block.settings.image | img_url: 'master' }} {{ block.settings.image.width }}w"
+                    src="{{ block.settings.image | img_url: '1500x' }}"
+                    sizes="100vw"
+                    alt="{{ block.settings.image.alt | escape }}"
+                    loading="lazy"
+                    width="{{ block.settings.image.width }}"
+                    height="{{ block.settings.image.height }}"
+                    class="about-hero-image"
+                  >
+                </div>
+              {% endif %}
+            </div>
+            
+          {% when 'text_block' %}
+            <div class="about-text-section" {{ block.shopify_attributes }}>
+              {% if block.settings.heading != blank %}
+                <h2 class="about-section-heading">{{ block.settings.heading }}</h2>
+              {% endif %}
+              
+              {% if block.settings.text != blank %}
+                <div class="about-section-text rte">
+                  {{ block.settings.text }}
+                </div>
+              {% endif %}
+            </div>
+            
+          {% when 'image_with_text' %}
+            <div class="about-image-text-section {% if block.settings.image_position == 'right' %}image-right{% else %}image-left{% endif %}" {{ block.shopify_attributes }}>
+              <div class="about-image-text-image">
+                {% if block.settings.image != blank %}
+                  <img 
+                    srcset="{% if block.settings.image.width >= 375 %}{{ block.settings.image | img_url: '375x' }} 375w,{% endif %}
+                            {% if block.settings.image.width >= 720 %}{{ block.settings.image | img_url: '720x' }} 720w,{% endif %}
+                            {% if block.settings.image.width >= 1080 %}{{ block.settings.image | img_url: '1080x' }} 1080w,{% endif %}
+                            {{ block.settings.image | img_url: 'master' }} {{ block.settings.image.width }}w"
+                    src="{{ block.settings.image | img_url: '720x' }}"
+                    sizes="(min-width: 1200px) 50vw, 100vw"
+                    alt="{{ block.settings.image.alt | escape }}"
+                    loading="lazy"
+                    width="{{ block.settings.image.width }}"
+                    height="{{ block.settings.image.height }}"
+                    class="about-image-text-img"
+                  >
+                {% endif %}
+              </div>
+              
+              <div class="about-image-text-content">
+                {% if block.settings.heading != blank %}
+                  <h2 class="about-section-heading">{{ block.settings.heading }}</h2>
+                {% endif %}
+                
+                {% if block.settings.text != blank %}
+                  <div class="about-section-text rte">
+                    {{ block.settings.text }}
+                  </div>
+                {% endif %}
+                
+                {% if block.settings.button_label != blank and block.settings.button_link != blank %}
+                  <a href="{{ block.settings.button_link }}" class="btn btn-primary about-button">
+                    {{ block.settings.button_label }}
+                  </a>
+                {% endif %}
+              </div>
+            </div>
+            
+          {% when 'founder_profile' %}
+            <div class="about-founder-section" {{ block.shopify_attributes }}>
+              <div class="about-founder-header">
+                <h2 class="about-section-heading">{{ block.settings.heading | default: 'Meet Our Founder' }}</h2>
+              </div>
+              
+              <div class="about-founder-content">
+                <div class="about-founder-image">
+                  {% if block.settings.image != blank %}
+                    <img 
+                      srcset="{% if block.settings.image.width >= 375 %}{{ block.settings.image | img_url: '375x' }} 375w,{% endif %}
+                              {% if block.settings.image.width >= 720 %}{{ block.settings.image | img_url: '720x' }} 720w,{% endif %}
+                              {% if block.settings.image.width >= 1080 %}{{ block.settings.image | img_url: '1080x' }} 1080w,{% endif %}
+                              {{ block.settings.image | img_url: 'master' }} {{ block.settings.image.width }}w"
+                      src="{{ block.settings.image | img_url: '720x' }}"
+                      sizes="(min-width: 1200px) 50vw, 100vw"
+                      alt="{{ block.settings.name | escape }}"
+                      loading="lazy"
+                      width="{{ block.settings.image.width }}"
+                      height="{{ block.settings.image.height }}"
+                      class="about-founder-img"
+                    >
+                  {% endif %}
+                </div>
+                
+                <div class="about-founder-info">
+                  {% if block.settings.name != blank %}
+                    <h3 class="about-founder-name">{{ block.settings.name }}</h3>
+                  {% endif %}
+                  
+                  {% if block.settings.title != blank %}
+                    <div class="about-founder-title">{{ block.settings.title }}</div>
+                  {% endif %}
+                  
+                  {% if block.settings.bio != blank %}
+                    <div class="about-founder-bio rte">
+                      {{ block.settings.bio }}
+                    </div>
+                  {% endif %}
+                  
+                  {% if block.settings.show_social %}
+                    <div class="about-founder-social">
+                      {% if block.settings.instagram_url != blank %}
+                        <a href="{{ block.settings.instagram_url }}" class="about-founder-social-link" target="_blank" rel="noopener" aria-label="Instagram">
+                          {% render 'icon-instagram' %}
+                        </a>
+                      {% endif %}
+                      
+                      {% if block.settings.twitter_url != blank %}
+                        <a href="{{ block.settings.twitter_url }}" class="about-founder-social-link" target="_blank" rel="noopener" aria-label="Twitter">
+                          {% render 'icon-twitter' %}
+                        </a>
+                      {% endif %}
+                      
+                      {% if block.settings.linkedin_url != blank %}
+                        <a href="{{ block.settings.linkedin_url }}" class="about-founder-social-link" target="_blank" rel="noopener" aria-label="LinkedIn">
+                          {% render 'icon-linkedin' %}
+                        </a>
+                      {% endif %}
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+            
+          {% when 'values' %}
+            <div class="about-values-section" {{ block.shopify_attributes }}>
+              {% if block.settings.heading != blank %}
+                <h2 class="about-section-heading">{{ block.settings.heading }}</h2>
+              {% endif %}
+              
+              {% if block.settings.text != blank %}
+                <div class="about-values-intro rte">
+                  {{ block.settings.text }}
+                </div>
+              {% endif %}
+              
+              <div class="about-values-grid">
+                {% for i in (1..4) %}
+                  {% assign value_heading = 'value_' | append: i | append: '_heading' %}
+                  {% assign value_text = 'value_' | append: i | append: '_text' %}
+                  {% assign value_icon = 'value_' | append: i | append: '_icon' %}
+                  
+                  {% if block.settings[value_heading] != blank %}
+                    <div class="about-value-item">
+                      {% if block.settings[value_icon] != blank %}
+                        <div class="about-value-icon">
+                          <img 
+                            src="{{ block.settings[value_icon] | img_url: '100x' }}"
+                            alt="{{ block.settings[value_heading] | escape }}"
+                            loading="lazy"
+                            width="60"
+                            height="60"
+                          >
+                        </div>
+                      {% endif %}
+                      
+                      <h3 class="about-value-heading">{{ block.settings[value_heading] }}</h3>
+                      
+                      {% if block.settings[value_text] != blank %}
+                        <div class="about-value-text rte">
+                          {{ block.settings[value_text] }}
+                        </div>
+                      {% endif %}
+                    </div>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            </div>
+            
+          {% when 'team' %}
+            <div class="about-team-section" {{ block.shopify_attributes }}>
+              {% if block.settings.heading != blank %}
+                <h2 class="about-section-heading">{{ block.settings.heading }}</h2>
+              {% endif %}
+              
+              {% if block.settings.text != blank %}
+                <div class="about-team-intro rte">
+                  {{ block.settings.text }}
+                </div>
+              {% endif %}
+              
+              <div class="about-team-grid">
+                {% for i in (1..6) %}
+                  {% assign member_image = 'member_' | append: i | append: '_image' %}
+                  {% assign member_name = 'member_' | append: i | append: '_name' %}
+                  {% assign member_title = 'member_' | append: i | append: '_title' %}
+                  {% assign member_bio = 'member_' | append: i | append: '_bio' %}
+                  
+                  {% if block.settings[member_name] != blank %}
+                    <div class="about-team-member">
+                      {% if block.settings[member_image] != blank %}
+                        <div class="about-team-member-image">
+                          <img 
+                            src="{{ block.settings[member_image] | img_url: '300x300', crop: 'center' }}"
+                            alt="{{ block.settings[member_name] | escape }}"
+                            loading="lazy"
+                            width="300"
+                            height="300"
+                            class="about-team-member-img"
+                          >
+                        </div>
+                      {% endif %}
+                      
+                      <div class="about-team-member-info">
+                        <h3 class="about-team-member-name">{{ block.settings[member_name] }}</h3>
+                        
+                        {% if block.settings[member_title] != blank %}
+                          <div class="about-team-member-title">{{ block.settings[member_title] }}</div>
+                        {% endif %}
+                        
+                        {% if block.settings[member_bio] != blank %}
+                          <div class="about-team-member-bio rte">
+                            {{ block.settings[member_bio] }}
+                          </div>
+                        {% endif %}
+                      </div>
+                    </div>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            </div>
+            
+          {% when 'cta' %}
+            <div class="about-cta-section" {{ block.shopify_attributes }}>
+              <div class="about-cta-content">
+                {% if block.settings.heading != blank %}
+                  <h2 class="about-cta-heading">{{ block.settings.heading }}</h2>
+                {% endif %}
+                
+                {% if block.settings.text != blank %}
+                  <div class="about-cta-text rte">
+                    {{ block.settings.text }}
+                  </div>
+                {% endif %}
+                
+                {% if block.settings.button_label != blank and block.settings.button_link != blank %}
+                  <a href="{{ block.settings.button_link }}" class="btn btn-primary about-cta-button">
+                    {{ block.settings.button_label }}
+                  </a>
+                {% endif %}
+              </div>
+            </div>
+        {% endcase %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "About Us Page",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_breadcrumbs",
+      "label": "Show breadcrumbs",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "About Get Up & Down Golf"
+    },
+    {
+      "type": "richtext",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "<p>Our story, mission, and the people behind the brand</p>"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "hero_image",
+      "name": "Hero Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        }
+      ]
+    },
+    {
+      "type": "text_block",
+      "name": "Text Block",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Our Story"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Share your brand story here. Connect with your customers by sharing the story behind your brand. Why did you start your business? What inspired you? What challenges did you face? Make it personal and engaging.</p>"
+        }
+      ]
+    },
+    {
+      "type": "image_with_text",
+      "name": "Image with Text",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "select",
+          "id": "image_position",
+          "label": "Image position",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "left"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Our Mission"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Share your brand's mission and values. What do you stand for? What makes your products special? How are you different from other brands?</p>"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        }
+      ]
+    },
+    {
+      "type": "founder_profile",
+      "name": "Founder Profile",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Section heading",
+          "default": "Meet Our Founder"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Founder image"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name",
+          "default": "Dominic Metoyer"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Founder & CEO"
+        },
+        {
+          "type": "richtext",
+          "id": "bio",
+          "label": "Bio",
+          "default": "<p>Share the founder's story, background, and passion for golf. What inspired them to start the brand? What experience do they bring to the table?</p>"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_social",
+          "label": "Show social links",
+          "default": true
+        },
+        {
+          "type": "url",
+          "id": "instagram_url",
+          "label": "Instagram URL"
+        },
+        {
+          "type": "url",
+          "id": "twitter_url",
+          "label": "Twitter URL"
+        },
+        {
+          "type": "url",
+          "id": "linkedin_url",
+          "label": "LinkedIn URL"
+        }
+      ]
+    },
+    {
+      "type": "values",
+      "name": "Brand Values",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Our Values"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>These core values guide everything we do at Get Up & Down Golf.</p>"
+        },
+        {
+          "type": "header",
+          "content": "Value 1"
+        },
+        {
+          "type": "image_picker",
+          "id": "value_1_icon",
+          "label": "Icon"
+        },
+        {
+          "type": "text",
+          "id": "value_1_heading",
+          "label": "Heading",
+          "default": "Quality"
+        },
+        {
+          "type": "richtext",
+          "id": "value_1_text",
+          "label": "Text",
+          "default": "<p>We're committed to creating premium golf apparel that performs on and off the course.</p>"
+        },
+        {
+          "type": "header",
+          "content": "Value 2"
+        },
+        {
+          "type": "image_picker",
+          "id": "value_2_icon",
+          "label": "Icon"
+        },
+        {
+          "type": "text",
+          "id": "value_2_heading",
+          "label": "Heading",
+          "default": "Innovation"
+        },
+        {
+          "type": "richtext",
+          "id": "value_2_text",
+          "label": "Text",
+          "default": "<p>We constantly push boundaries to bring fresh designs and technologies to golf apparel.</p>"
+        },
+        {
+          "type": "header",
+          "content": "Value 3"
+        },
+        {
+          "type": "image_picker",
+          "id": "value_3_icon",
+          "label": "Icon"
+        },
+        {
+          "type": "text",
+          "id": "value_3_heading",
+          "label": "Heading",
+          "default": "Inclusivity"
+        },
+        {
+          "type": "richtext",
+          "id": "value_3_text",
+          "label": "Text",
+          "default": "<p>We believe golf is for everyone and design products that welcome all to the game.</p>"
+        },
+        {
+          "type": "header",
+          "content": "Value 4"
+        },
+        {
+          "type": "image_picker",
+          "id": "value_4_icon",
+          "label": "Icon"
+        },
+        {
+          "type": "text",
+          "id": "value_4_heading",
+          "label": "Heading",
+          "default": "Sustainability"
+        },
+        {
+          "type": "richtext",
+          "id": "value_4_text",
+          "label": "Text",
+          "default": "<p>We're committed to responsible practices that minimize our environmental impact.</p>"
+        }
+      ]
+    },
+    {
+      "type": "team",
+      "name": "Team",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Our Team"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Meet the passionate people behind Get Up & Down Golf.</p>"
+        },
+        {
+          "type": "header",
+          "content": "Team Member 1"
+        },
+        {
+          "type": "image_picker",
+          "id": "member_1_image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "member_1_name",
+          "label": "Name"
+        },
+        {
+          "type": "text",
+          "id": "member_1_title",
+          "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "member_1_bio",
+          "label": "Bio"
+        },
+        {
+          "type": "header",
+          "content": "Team Member 2"
+        },
+        {
+          "type": "image_picker",
+          "id": "member_2_image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "member_2_name",
+          "label": "Name"
+        },
+        {
+          "type": "text",
+          "id": "member_2_title",
+          "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "member_2_bio",
+          "label": "Bio"
+        },
+        {
+          "type": "header",
+          "content": "Team Member 3"
+        },
+        {
+          "type": "image_picker",
+          "id": "member_3_image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "member_3_name",
+          "label": "Name"
+        },
+        {
+          "type": "text",
+          "id": "member_3_title",
+          "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "member_3_bio",
+          "label": "Bio"
+        },
+        {
+          "type": "header",
+          "content": "Team Member 4"
+        },
+        {
+          "type": "image_picker",
+          "id": "member_4_image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "member_4_name",
+          "label": "Name"
+        },
+        {
+          "type": "text",
+          "id": "member_4_title",
+          "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "member_4_bio",
+          "label": "Bio"
+        },
+        {
+          "type": "header",
+          "content": "Team Member 5"
+        },
+        {
+          "type": "image_picker",
+          "id": "member_5_image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "member_5_name",
+          "label": "Name"
+        },
+        {
+          "type": "text",
+          "id": "member_5_title",
+          "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "member_5_bio",
+          "label": "Bio"
+        },
+        {
+          "type": "header",
+          "content": "Team Member 6"
+        },
+        {
+          "type": "image_picker",
+          "id": "member_6_image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "member_6_name",
+          "label": "Name"
+        },
+        {
+          "type": "text",
+          "id": "member_6_title",
+          "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "member_6_bio",
+          "label": "Bio"
+        }
+      ]
+    },
+    {
+      "type": "cta",
+      "name": "Call to Action",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Join the Get Up & Down Golf Community"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Be part of our growing community of golf enthusiasts who appreciate style, performance, and culture.</p>"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label",
+          "default": "Shop Now"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "About Us Page",
+      "blocks": [
+        {
+          "type": "hero_image"
+        },
+        {
+          "type": "text_block"
+        },
+        {
+          "type": "founder_profile"
+        },
+        {
+          "type": "values"
+        },
+        {
+          "type": "cta"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,422 @@
+{
+  "name": "Get Up & Down Golf",
+  "author": "Get Up & Down Golf",
+  "version": "1.0.0",
+  "description": "Premium golf apparel and accessories Shopify theme",
+  "keywords": [
+    "shopify",
+    "theme",
+    "golf",
+    "apparel",
+    "e-commerce"
+  ],
+  "documentation": {
+    "summary": "A premium Shopify theme for Get Up & Down Golf",
+    "url": "https://getupanddowngolf.com/theme-documentation"
+  },
+  "settings": [
+    {
+      "name": "theme_info",
+      "theme_name": "Get Up & Down Golf",
+      "theme_version": "1.0.0",
+      "theme_author": "Get Up & Down Golf",
+      "theme_documentation_url": "https://help.shopify.com/manual/online-store/themes",
+      "theme_support_url": "https://support.shopify.com/"
+    },
+    {
+      "name": "Colors",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Brand Colors"
+        },
+        {
+          "type": "color",
+          "id": "primary_color",
+          "label": "Primary Color",
+          "default": "#0A3B2D"
+        },
+        {
+          "type": "color",
+          "id": "secondary_color",
+          "label": "Secondary Color",
+          "default": "#F8B042"
+        },
+        {
+          "type": "color",
+          "id": "accent_color",
+          "label": "Accent Color",
+          "default": "#E54B4B"
+        },
+        {
+          "type": "header",
+          "content": "Text Colors"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text Color",
+          "default": "#333333"
+        },
+        {
+          "type": "color",
+          "id": "heading_color",
+          "label": "Heading Color",
+          "default": "#222222"
+        },
+        {
+          "type": "color",
+          "id": "light_text_color",
+          "label": "Light Text Color",
+          "default": "#FFFFFF"
+        },
+        {
+          "type": "header",
+          "content": "Background Colors"
+        },
+        {
+          "type": "color",
+          "id": "background_color",
+          "label": "Background Color",
+          "default": "#FFFFFF"
+        },
+        {
+          "type": "color",
+          "id": "light_background_color",
+          "label": "Light Background Color",
+          "default": "#F9F9F9"
+        },
+        {
+          "type": "color",
+          "id": "dark_background_color",
+          "label": "Dark Background Color",
+          "default": "#0A3B2D"
+        }
+      ]
+    },
+    {
+      "name": "Typography",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Headings"
+        },
+        {
+          "type": "font_picker",
+          "id": "heading_font",
+          "label": "Font",
+          "default": "montserrat_n7"
+        },
+        {
+          "type": "range",
+          "id": "heading_size",
+          "min": 16,
+          "max": 60,
+          "step": 1,
+          "unit": "px",
+          "label": "Size",
+          "default": 36
+        },
+        {
+          "type": "header",
+          "content": "Body Text"
+        },
+        {
+          "type": "font_picker",
+          "id": "body_font",
+          "label": "Body Font",
+          "default": "roboto_n4"
+        },
+        {
+          "type": "range",
+          "id": "body_size",
+          "min": 12,
+          "max": 20,
+          "step": 1,
+          "unit": "px",
+          "label": "Body Size",
+          "default": 16
+        }
+      ]
+    },
+    {
+      "name": "Buttons",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Primary Button"
+        },
+        {
+          "type": "color",
+          "id": "button_background",
+          "label": "Button Background",
+          "default": "#0A3B2D"
+        },
+        {
+          "type": "color",
+          "id": "button_text",
+          "label": "Button Text",
+          "default": "#FFFFFF"
+        },
+        {
+          "type": "color",
+          "id": "button_hover_background",
+          "label": "Button Hover Background",
+          "default": "#F8B042"
+        },
+        {
+          "type": "color",
+          "id": "button_hover_text",
+          "label": "Button Hover Text",
+          "default": "#FFFFFF"
+        },
+        {
+          "type": "header",
+          "content": "Secondary Button"
+        },
+        {
+          "type": "color",
+          "id": "secondary_button_background",
+          "label": "Secondary Button Background",
+          "default": "transparent"
+        },
+        {
+          "type": "color",
+          "id": "secondary_button_text",
+          "label": "Secondary Button Text",
+          "default": "#0A3B2D"
+        },
+        {
+          "type": "color",
+          "id": "secondary_button_border",
+          "label": "Secondary Button Border",
+          "default": "#0A3B2D"
+        }
+      ]
+    },
+    {
+      "name": "Header",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "logo",
+          "label": "Logo"
+        },
+        {
+          "type": "range",
+          "id": "logo_width",
+          "min": 50,
+          "max": 300,
+          "step": 10,
+          "unit": "px",
+          "label": "Logo Width",
+          "default": 180
+        },
+        {
+          "type": "checkbox",
+          "id": "sticky_header",
+          "label": "Sticky Header",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_announcement_bar",
+          "label": "Show Announcement Bar",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "announcement_text",
+          "label": "Announcement Text",
+          "default": "Free shipping on all orders over $100"
+        }
+      ]
+    },
+    {
+      "name": "Footer",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_newsletter",
+          "label": "Show Newsletter Signup",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "newsletter_title",
+          "label": "Newsletter Title",
+          "default": "Subscribe to our newsletter"
+        },
+        {
+          "type": "textarea",
+          "id": "newsletter_text",
+          "label": "Newsletter Text",
+          "default": "Sign up for exclusive offers, original stories, events and more."
+        },
+        {
+          "type": "checkbox",
+          "id": "show_social_icons",
+          "label": "Show Social Icons",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "instagram_url",
+          "label": "Instagram URL"
+        },
+        {
+          "type": "text",
+          "id": "facebook_url",
+          "label": "Facebook URL"
+        },
+        {
+          "type": "text",
+          "id": "twitter_url",
+          "label": "Twitter URL"
+        },
+        {
+          "type": "text",
+          "id": "youtube_url",
+          "label": "YouTube URL"
+        }
+      ]
+    },
+    {
+      "name": "Social Media",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Social Sharing Options"
+        },
+        {
+          "type": "checkbox",
+          "id": "share_facebook",
+          "label": "Share on Facebook",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "share_twitter",
+          "label": "Share on Twitter",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "share_pinterest",
+          "label": "Share on Pinterest",
+          "default": true
+        }
+      ]
+    },
+    {
+      "name": "Product Page",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_quantity_selector",
+          "label": "Show Quantity Selector",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_variant_labels",
+          "label": "Show Variant Labels",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_vendor",
+          "label": "Show Vendor",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_zoom",
+          "label": "Enable Image Zoom",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_video_looping",
+          "label": "Enable Video Looping",
+          "default": false
+        }
+      ]
+    },
+    {
+      "name": "Cart",
+      "settings": [
+        {
+          "type": "select",
+          "id": "cart_type",
+          "label": "Cart Type",
+          "options": [
+            {
+              "value": "drawer",
+              "label": "Drawer"
+            },
+            {
+              "value": "page",
+              "label": "Page"
+            }
+          ],
+          "default": "drawer"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_cart_notes",
+          "label": "Enable Cart Notes",
+          "default": true
+        }
+      ]
+    },
+    {
+      "name": "Layout",
+      "settings": [
+        {
+          "type": "header",
+          "content": "General"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_sticky_header",
+          "label": "Enable sticky header",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "cart_type",
+          "label": "Use cart drawer",
+          "default": true
+        }
+      ]
+    },
+    {
+      "name": "Social media",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Social accounts"
+        },
+        {
+          "type": "text",
+          "id": "social_facebook_link",
+          "label": "Facebook",
+          "info": "https://facebook.com/shopify"
+        },
+        {
+          "type": "text",
+          "id": "social_instagram_link",
+          "label": "Instagram",
+          "info": "https://instagram.com/shopify"
+        },
+        {
+          "type": "text",
+          "id": "social_twitter_link",
+          "label": "Twitter",
+          "info": "https://twitter.com/shopify"
+        }
+      ]
+    }
+  ]
+}

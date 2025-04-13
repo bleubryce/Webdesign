@@ -1,0 +1,106 @@
+{%- if section.settings.show_announcement -%}
+  <div class="announcement-bar" data-section-id="{{ section.id }}" data-section-type="announcement-bar">
+    {%- if section.settings.announcement_link != blank -%}
+      <a href="{{ section.settings.announcement_link }}" class="announcement-bar__link">
+    {%- endif -%}
+    
+    <div class="page-width">
+      <p class="announcement-bar__message {{ section.settings.text_alignment }}">
+        {{ section.settings.announcement_text | escape }}
+      </p>
+    </div>
+    
+    {%- if section.settings.announcement_link != blank -%}
+      </a>
+    {%- endif -%}
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Announcement bar",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_announcement",
+      "label": "Show announcement",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "announcement_text",
+      "label": "Announcement text",
+      "default": "Announce something here"
+    },
+    {
+      "type": "url",
+      "id": "announcement_link",
+      "label": "Announcement link",
+      "info": "Optional"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "text-left",
+          "label": "Left"
+        },
+        {
+          "value": "text-center",
+          "label": "Center"
+        },
+        {
+          "value": "text-right",
+          "label": "Right"
+        }
+      ],
+      "default": "text-center"
+    },
+    {
+      "type": "color",
+      "id": "color_bg",
+      "label": "Background",
+      "default": "#0A3B2D"
+    },
+    {
+      "type": "color",
+      "id": "color_text",
+      "label": "Text",
+      "default": "#FFFFFF"
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+.announcement-bar {
+  background-color: {{ section.settings.color_bg }};
+  color: {{ section.settings.color_text }};
+  padding: 10px 0;
+  font-size: 0.875em;
+}
+
+.announcement-bar__message {
+  margin: 0;
+}
+
+.announcement-bar__link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+{% endstylesheet %} 

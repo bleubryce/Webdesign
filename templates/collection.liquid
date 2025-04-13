@@ -1,0 +1,551 @@
+{% comment %}
+  Collection Template for Get Up & Down Golf Shopify Theme
+  - Displays collection products with filtering and sorting options
+{% endcomment %}
+
+<div class="collection-template section">
+  <div class="container">
+    <div class="collection-header">
+      {% if collection.image %}
+        <div class="collection-image-wrapper">
+          <img 
+            srcset="{% if collection.image.width >= 375 %}{{ collection.image | img_url: '375x' }} 375w,{% endif %}
+                    {% if collection.image.width >= 720 %}{{ collection.image | img_url: '720x' }} 720w,{% endif %}
+                    {% if collection.image.width >= 1080 %}{{ collection.image | img_url: '1080x' }} 1080w,{% endif %}
+                    {% if collection.image.width >= 1500 %}{{ collection.image | img_url: '1500x' }} 1500w,{% endif %}
+                    {{ collection.image | img_url: 'master' }} {{ collection.image.width }}w"
+            src="{{ collection.image | img_url: '1500x' }}"
+            sizes="100vw"
+            alt="{{ collection.title | escape }}"
+            loading="eager"
+            width="{{ collection.image.width }}"
+            height="{{ collection.image.height }}"
+            class="collection-image"
+          >
+          <div class="collection-image-overlay"></div>
+        </div>
+      {% endif %}
+      
+      <div class="collection-info">
+        <h1 class="collection-title">{{ collection.title }}</h1>
+        
+        {% if collection.description != blank %}
+          <div class="collection-description rte">
+            {{ collection.description }}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+    
+    <div class="collection-toolbar">
+      <div class="collection-filter-toggle">
+        <button type="button" class="btn btn-secondary filter-toggle-button" aria-expanded="false" aria-controls="collection-filters">
+          {% render 'icon-filter' %}
+          Filter
+          <span class="filter-count"></span>
+        </button>
+      </div>
+      
+      <div class="collection-sort">
+        <label for="SortBy" class="collection-sort-label">Sort by:</label>
+        <select id="SortBy" class="collection-sort-select">
+          <option value="manual" {% if collection.sort_by == 'manual' %}selected="selected"{% endif %}>Featured</option>
+          <option value="best-selling" {% if collection.sort_by == 'best-selling' %}selected="selected"{% endif %}>Best Selling</option>
+          <option value="title-ascending" {% if collection.sort_by == 'title-ascending' %}selected="selected"{% endif %}>Alphabetically, A-Z</option>
+          <option value="title-descending" {% if collection.sort_by == 'title-descending' %}selected="selected"{% endif %}>Alphabetically, Z-A</option>
+          <option value="price-ascending" {% if collection.sort_by == 'price-ascending' %}selected="selected"{% endif %}>Price, low to high</option>
+          <option value="price-descending" {% if collection.sort_by == 'price-descending' %}selected="selected"{% endif %}>Price, high to low</option>
+          <option value="created-descending" {% if collection.sort_by == 'created-descending' %}selected="selected"{% endif %}>Date, new to old</option>
+          <option value="created-ascending" {% if collection.sort_by == 'created-ascending' %}selected="selected"{% endif %}>Date, old to new</option>
+        </select>
+      </div>
+      
+      <div class="collection-view">
+        <button type="button" class="collection-view-button grid-view active" aria-label="Grid view">
+          {% render 'icon-grid' %}
+        </button>
+        <button type="button" class="collection-view-button list-view" aria-label="List view">
+          {% render 'icon-list' %}
+        </button>
+      </div>
+    </div>
+    
+    <div class="collection-content">
+      <div id="collection-filters" class="collection-filters">
+        <div class="collection-filters-header">
+          <h2 class="collection-filters-title">Filter</h2>
+          <button type="button" class="collection-filters-close" aria-label="Close filters">
+            {% render 'icon-close' %}
+          </button>
+        </div>
+        
+        <div class="collection-filters-content">
+          {% assign filters_active = false %}
+          {% for filter in collection.filters %}
+            {% if filter.active_values.size > 0 %}
+              {% assign filters_active = true %}
+            {% endif %}
+          {% endfor %}
+          
+          {% if filters_active %}
+            <div class="collection-filters-active">
+              <div class="collection-filters-active-header">
+                <span>Active filters:</span>
+                <a href="{{ collection.url }}?sort_by={{ collection.sort_by }}" class="collection-filters-clear">Clear all</a>
+              </div>
+              
+              <ul class="collection-filters-active-list">
+                {% for filter in collection.filters %}
+                  {% for active_value in filter.active_values %}
+                    <li class="collection-filters-active-item">
+                      <a href="{{ active_value.url_to_remove }}" class="collection-filters-active-remove">
+                        {{ filter.label }}: {{ active_value.label }}
+                        {% render 'icon-close-small' %}
+                      </a>
+                    </li>
+                  {% endfor %}
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
+          
+          <form id="CollectionFiltersForm" class="collection-filters-form">
+            {% for filter in collection.filters %}
+              <div class="collection-filter-group">
+                <details class="collection-filter-details" {% if filters_active and filter.active_values.size > 0 %}open{% endif %}>
+                  <summary class="collection-filter-summary">
+                    <div class="collection-filter-label">{{ filter.label }}</div>
+                    <span class="collection-filter-icon">{% render 'icon-chevron-down' %}</span>
+                  </summary>
+                  
+                  <div class="collection-filter-options">
+                    {% case filter.type %}
+                      {% when 'boolean' or 'list' %}
+                        <ul class="collection-filter-list">
+                          {% for filter_value in filter.values %}
+                            <li class="collection-filter-item">
+                              <label class="collection-filter-checkbox">
+                                <input 
+                                  type="checkbox" 
+                                  name="{{ filter_value.param_name }}" 
+                                  value="{{ filter_value.value }}" 
+                                  {% if filter_value.active %}checked{% endif %}
+                                  data-filter-update
+                                >
+                                <span class="collection-filter-checkbox-label">
+                                  {{ filter_value.label }} ({{ filter_value.count }})
+                                </span>
+                              </label>
+                            </li>
+                          {% endfor %}
+                        </ul>
+                      
+                      {% when 'price_range' %}
+                        <div class="collection-filter-price">
+                          <div class="collection-filter-price-range">
+                            <div class="collection-filter-price-field">
+                              <label for="price-min">Min</label>
+                              <input 
+                                type="number" 
+                                id="price-min" 
+                                name="{{ filter.min_value.param_name }}" 
+                                value="{{ filter.min_value.value | default: filter.range_min | money_without_currency | replace: ',', '' }}" 
+                                min="0" 
+                                max="{{ filter.range_max | money_without_currency | replace: ',', '' }}" 
+                                placeholder="{{ filter.range_min | money_without_currency }}"
+                                data-filter-update
+                              >
+                            </div>
+                            <div class="collection-filter-price-separator">-</div>
+                            <div class="collection-filter-price-field">
+                              <label for="price-max">Max</label>
+                              <input 
+                                type="number" 
+                                id="price-max" 
+                                name="{{ filter.max_value.param_name }}" 
+                                value="{{ filter.max_value.value | default: filter.range_max | money_without_currency | replace: ',', '' }}" 
+                                min="0" 
+                                max="{{ filter.range_max | money_without_currency | replace: ',', '' }}" 
+                                placeholder="{{ filter.range_max | money_without_currency }}"
+                                data-filter-update
+                              >
+                            </div>
+                          </div>
+                        </div>
+                    {% endcase %}
+                  </div>
+                </details>
+              </div>
+            {% endfor %}
+          </form>
+        </div>
+        
+        <div class="collection-filters-footer">
+          <button type="button" class="btn btn-primary collection-filters-apply">Apply Filters</button>
+          <button type="button" class="collection-filters-close-button">Close</button>
+        </div>
+      </div>
+      
+      <div class="collection-products">
+        {% paginate collection.products by 24 %}
+          <div class="collection-products-grid">
+            {% for product in collection.products %}
+              <div class="collection-product">
+                <div class="product-card">
+                  <a href="{{ product.url }}" class="product-card-link">
+                    <div class="product-card-image-wrapper">
+                      {% if product.featured_image != blank %}
+                        <img 
+                          srcset="{% if product.featured_image.width >= 200 %}{{ product.featured_image | img_url: '200x' }} 200w,{% endif %}
+                                  {% if product.featured_image.width >= 400 %}{{ product.featured_image | img_url: '400x' }} 400w,{% endif %}
+                                  {% if product.featured_image.width >= 600 %}{{ product.featured_image | img_url: '600x' }} 600w,{% endif %}
+                                  {% if product.featured_image.width >= 800 %}{{ product.featured_image | img_url: '800x' }} 800w,{% endif %}
+                                  {{ product.featured_image | img_url: 'master' }} {{ product.featured_image.width }}w"
+                          src="{{ product.featured_image | img_url: '400x' }}"
+                          sizes="(min-width: 1200px) 25vw, (min-width: 750px) 33vw, 50vw"
+                          alt="{{ product.featured_image.alt | escape }}"
+                          loading="lazy"
+                          width="{{ product.featured_image.width }}"
+                          height="{{ product.featured_image.height }}"
+                          class="product-card-image"
+                        >
+                      {% else %}
+                        {{ 'product-1' | placeholder_svg_tag: 'product-card-image placeholder' }}
+                      {% endif %}
+                      
+                      {% if product.compare_at_price > product.price %}
+                        <span class="product-card-badge sale">Sale</span>
+                      {% endif %}
+                      
+                      {% if product.available == false %}
+                        <span class="product-card-badge sold-out">Sold Out</span>
+                      {% endif %}
+                    </div>
+                    
+                    <div class="product-card-info">
+                      {% if section.settings.show_vendor %}
+                        <p class="product-card-vendor">{{ product.vendor }}</p>
+                      {% endif %}
+                      
+                      <h3 class="product-card-title">{{ product.title }}</h3>
+                      
+                      <div class="product-card-price">
+                        {% if product.compare_at_price > product.price %}
+                          <span class="product-price-sale">{{ product.price | money }}</span>
+                          <span class="product-price-compare">{{ product.compare_at_price | money }}</span>
+                        {% else %}
+                          <span class="product-price">{{ product.price | money }}</span>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </a>
+                  
+                  {% if section.settings.show_quick_add %}
+                    <div class="product-card-actions">
+                      {% if product.available and product.variants.size == 1 %}
+                        <form method="post" action="/cart/add" class="product-card-form">
+                          <input type="hidden" name="id" value="{{ product.variants.first.id }}">
+                          <button type="submit" class="btn btn-primary product-card-add">
+                            {{ section.settings.quick_add_text }}
+                          </button>
+                        </form>
+                      {% else %}
+                        <a href="{{ product.url }}" class="btn btn-primary product-card-view">
+                          {{ section.settings.view_product_text }}
+                        </a>
+                      {% endif %}
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+            {% else %}
+              <div class="collection-empty">
+                <p>No products found in this collection</p>
+              </div>
+            {% endfor %}
+          </div>
+          
+          {% if paginate.pages > 1 %}
+            <div class="collection-pagination">
+              <nav class="pagination" role="navigation" aria-label="Pagination">
+                {% if paginate.previous %}
+                  <a href="{{ paginate.previous.url }}" class="pagination-prev">
+                    {% render 'icon-chevron-left' %}
+                    Previous
+                  </a>
+                {% else %}
+                  <span class="pagination-prev disabled">
+                    {% render 'icon-chevron-left' %}
+                    Previous
+                  </span>
+                {% endif %}
+                
+                <ul class="pagination-list">
+                  {% for part in paginate.parts %}
+                    {% if part.is_link %}
+                      <li>
+                        <a href="{{ part.url }}" class="pagination-link">{{ part.title }}</a>
+                      </li>
+                    {% else %}
+                      {% if part.title == paginate.current_page %}
+                        <li>
+                          <span class="pagination-link current">{{ part.title }}</span>
+                        </li>
+                      {% else %}
+                        <li>
+                          <span class="pagination-ellipsis">{{ part.title }}</span>
+                        </li>
+                      {% endif %}
+                    {% endif %}
+                  {% endfor %}
+                </ul>
+                
+                {% if paginate.next %}
+                  <a href="{{ paginate.next.url }}" class="pagination-next">
+                    Next
+                    {% render 'icon-chevron-right' %}
+                  </a>
+                {% else %}
+                  <span class="pagination-next disabled">
+                    Next
+                    {% render 'icon-chevron-right' %}
+                  </span>
+                {% endif %}
+              </nav>
+            </div>
+          {% endif %}
+        {% endpaginate %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="collection-filters-overlay"></div>
+
+{% schema %}
+{
+  "name": "Collection",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_collection_image",
+      "label": "Show collection image",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_description",
+      "label": "Show collection description",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show vendor",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_quick_add",
+      "label": "Show quick add button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "quick_add_text",
+      "label": "Quick add button text",
+      "default": "Add to Cart"
+    },
+    {
+      "type": "text",
+      "id": "view_product_text",
+      "label": "View product button text",
+      "default": "View Details"
+    },
+    {
+      "type": "select",
+      "id": "grid_columns_desktop",
+      "label": "Products per row (desktop)",
+      "options": [
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        }
+      ],
+      "default": "3"
+    },
+    {
+      "type": "select",
+      "id": "grid_columns_mobile",
+      "label": "Products per row (mobile)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "label": "Products per page",
+      "default": 24
+    }
+  ]
+}
+{% endschema %}
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Sort by functionality
+    const sortSelect = document.getElementById('SortBy');
+    if (sortSelect) {
+      sortSelect.addEventListener('change', function() {
+        const url = new URL(window.location.href);
+        url.searchParams.set('sort_by', this.value);
+        window.location.href = url.toString();
+      });
+    }
+    
+    // Filter toggle
+    const filterToggle = document.querySelector('.filter-toggle-button');
+    const filters = document.getElementById('collection-filters');
+    const filtersOverlay = document.querySelector('.collection-filters-overlay');
+    const filtersClose = document.querySelector('.collection-filters-close');
+    const filtersCloseButton = document.querySelector('.collection-filters-close-button');
+    
+    if (filterToggle && filters) {
+      filterToggle.addEventListener('click', function() {
+        filters.classList.add('active');
+        filtersOverlay.classList.add('active');
+        document.body.classList.add('filters-open');
+        this.setAttribute('aria-expanded', 'true');
+      });
+      
+      if (filtersClose) {
+        filtersClose.addEventListener('click', closeFilters);
+      }
+      
+      if (filtersCloseButton) {
+        filtersCloseButton.addEventListener('click', closeFilters);
+      }
+      
+      if (filtersOverlay) {
+        filtersOverlay.addEventListener('click', closeFilters);
+      }
+      
+      function closeFilters() {
+        filters.classList.remove('active');
+        filtersOverlay.classList.remove('active');
+        document.body.classList.remove('filters-open');
+        filterToggle.setAttribute('aria-expanded', 'false');
+      }
+    }
+    
+    // Filter form submission
+    const filterForm = document.getElementById('CollectionFiltersForm');
+    const filterInputs = document.querySelectorAll('[data-filter-update]');
+    const applyFiltersButton = document.querySelector('.collection-filters-apply');
+    
+    if (filterForm && applyFiltersButton) {
+      applyFiltersButton.addEventListener('click', function() {
+        applyFilters();
+      });
+      
+      filterInputs.forEach(input => {
+        if (input.type === 'checkbox') {
+          input.addEventListener('change', function() {
+            updateFilterCount();
+          });
+        }
+      });
+      
+      function applyFilters() {
+        const formData = new FormData(filterForm);
+        const searchParams = new URLSearchParams(formData);
+        const currentUrl = new URL(window.location.href);
+        
+        // Preserve sort parameter
+        const sortValue = currentUrl.searchParams.get('sort_by');
+        if (sortValue) {
+          searchParams.set('sort_by', sortValue);
+        }
+        
+        // Build new URL
+        const newUrl = `${window.location.pathname}?${searchParams.toString()}`;
+        window.location.href = newUrl;
+      }
+      
+      function updateFilterCount() {
+        const activeFilters = document.querySelectorAll('[data-filter-update]:checked').length;
+        const filterCount = document.querySelector('.filter-count');
+        
+        if (filterCount) {
+          if (activeFilters > 0) {
+            filterCount.textContent = `(${activeFilters})`;
+            filterCount.classList.add('active');
+          } else {
+            filterCount.textContent = '';
+            filterCount.classList.remove('active');
+          }
+        }
+      }
+      
+      // Initialize filter count
+      updateFilterCount();
+    }
+    
+    // View toggle (grid/list)
+    const gridViewButton = document.querySelector('.grid-view');
+    const listViewButton = document.querySelector('.list-view');
+    const productsGrid = document.querySelector('.collection-products-grid');
+    
+    if (gridViewButton && listViewButton && productsGrid) {
+      gridViewButton.addEventListener('click', function() {
+        productsGrid.classList.remove('list-view-active');
+        productsGrid.classList.add('grid-view-active');
+        gridViewButton.classList.add('active');
+        listViewButton.classList.remove('active');
+        localStorage.setItem('collection_view', 'grid');
+      });
+      
+      listViewButton.addEventListener('click', function() {
+        productsGrid.classList.remove('grid-view-active');
+        productsGrid.classList.add('list-view-active');
+        listViewButton.classList.add('active');
+        gridViewButton.classList.remove('active');
+        localStorage.setItem('collection_view', 'list');
+      });
+      
+      // Initialize view based on localStorage
+      const savedView = localStorage.getItem('collection_view');
+      if (savedView === 'list') {
+        productsGrid.classList.remove('grid-view-active');
+        productsGrid.classList.add('list-view-active');
+        listViewButton.classList.add('active');
+        gridViewButton.classList.remove('active');
+      } else {
+        productsGrid.classList.remove('list-view-active');
+        productsGrid.classList.add('grid-view-active');
+        gridViewButton.classList.add('active');
+        listViewButton.classList.remove('active');
+      }
+    }
+  });
+</script>

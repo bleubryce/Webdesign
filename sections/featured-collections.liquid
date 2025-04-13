@@ -1,0 +1,122 @@
+{% comment %}
+  Featured Collections Section
+{% endcomment %}
+
+<div class="featured-collections section">
+  <div class="container">
+    {% if section.settings.title != blank %}
+      <h2 class="section-title">{{ section.settings.title }}</h2>
+    {% endif %}
+
+    {% if section.settings.subtitle != blank %}
+      <div class="section-subtitle">{{ section.settings.subtitle }}</div>
+    {% endif %}
+
+    <div class="featured-collections-grid grid-{{ section.blocks.size }}">
+      {% for block in section.blocks %}
+        {% assign collection = collections[block.settings.collection] %}
+        {% if collection != blank %}
+          <div class="featured-collection-item" {{ block.shopify_attributes }}>
+            <a href="{{ collection.url }}" class="featured-collection-link">
+              {% if collection.image != blank %}
+                <div class="featured-collection-image">
+                  <img
+                    srcset="{% if collection.image.width >= 375 %}{{ collection.image | image_url: width: 375 }} 375w,{% endif %}
+                      {% if collection.image.width >= 720 %}{{ collection.image | image_url: width: 720 }} 720w,{% endif %}
+                      {% if collection.image.width >= 1080 %}{{ collection.image | image_url: width: 1080 }} 1080w,{% endif %}
+                      {{ collection.image | image_url }} {{ collection.image.width }}w"
+                    src="{{ collection.image | image_url: width: 720 }}"
+                    alt="{{ collection.title | escape }}"
+                    width="{{ collection.image.width }}"
+                    height="{{ collection.image.height }}"
+                    loading="lazy"
+                  >
+                </div>
+              {% else %}
+                <div class="featured-collection-image placeholder">
+                  {{ 'collection-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                </div>
+              {% endif %}
+
+              <div class="featured-collection-content">
+                <h3 class="featured-collection-title">{{ collection.title }}</h3>
+                {% if block.settings.show_description and collection.description != blank %}
+                  <div class="featured-collection-description">{{ collection.description }}</div>
+                {% endif %}
+                {% if block.settings.show_button %}
+                  <span class="btn btn-secondary">{{ block.settings.button_label | default: 'Shop Now' }}</span>
+                {% endif %}
+              </div>
+            </a>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Featured Collections",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Featured Collections"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subheading"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_description",
+          "label": "Show description",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_button",
+          "label": "Show button",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label",
+          "default": "Shop Now"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Collections",
+      "blocks": [
+        {
+          "type": "collection"
+        },
+        {
+          "type": "collection"
+        },
+        {
+          "type": "collection"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %} 

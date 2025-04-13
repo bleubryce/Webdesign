@@ -1,0 +1,99 @@
+{% comment %}
+  Cart Drawer Template
+  - Displays a sliding cart drawer with product list and checkout button
+{% endcomment %}
+
+<div id="cart-drawer" class="cart-drawer" aria-hidden="true">
+  <div class="cart-drawer-overlay"></div>
+  
+  <div class="cart-drawer-content">
+    <div class="cart-drawer-header">
+      <h2 class="cart-drawer-title">Your Cart</h2>
+      <button class="cart-drawer-close" aria-label="Close cart">
+        {% render 'icon-close' %}
+      </button>
+    </div>
+
+    <div class="cart-drawer-items">
+      {% if cart.item_count > 0 %}
+        <form action="/cart" method="post" novalidate class="cart-drawer-form">
+          <div class="cart-items">
+            {% for item in cart.items %}
+              <div class="cart-item" data-item-key="{{ item.key }}">
+                <div class="cart-item-image">
+                  <a href="{{ item.url }}">
+                    <img
+                      src="{{ item.image | img_url: '120x' }}"
+                      alt="{{ item.title | escape }}"
+                      loading="lazy"
+                      width="60"
+                      height="60"
+                    >
+                  </a>
+                </div>
+
+                <div class="cart-item-content">
+                  <div class="cart-item-title">
+                    <a href="{{ item.url }}">{{ item.product.title }}</a>
+                    {% if item.product.has_only_default_variant == false %}
+                      <p class="cart-item-variant">{{ item.variant.title }}</p>
+                    {% endif %}
+                  </div>
+
+                  <div class="cart-item-price">
+                    {% if item.original_price != item.final_price %}
+                      <span class="cart-item-regular-price">{{ item.original_price | money }}</span>
+                      <span class="cart-item-sale-price">{{ item.final_price | money }}</span>
+                    {% else %}
+                      <span class="cart-item-regular-price">{{ item.original_price | money }}</span>
+                    {% endif %}
+                  </div>
+
+                  <div class="cart-item-quantity">
+                    <div class="quantity-selector">
+                      <button type="button" class="quantity-decrease" aria-label="Decrease quantity">-</button>
+                      <input
+                        type="number"
+                        name="updates[]"
+                        value="{{ item.quantity }}"
+                        min="0"
+                        aria-label="Quantity"
+                        class="quantity-input"
+                        data-item-key="{{ item.key }}"
+                      >
+                      <button type="button" class="quantity-increase" aria-label="Increase quantity">+</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+
+          <div class="cart-drawer-footer">
+            <div class="cart-subtotal">
+              <span class="cart-subtotal-label">Subtotal</span>
+              <span class="cart-subtotal-price">{{ cart.total_price | money }}</span>
+            </div>
+
+            <div class="cart-buttons">
+              <button type="submit" class="btn btn-primary cart-checkout-button">
+                Checkout
+              </button>
+              <a href="/cart" class="btn btn-secondary cart-view-button">
+                View Cart
+              </a>
+            </div>
+          </div>
+        </form>
+      {% else %}
+        <div class="cart-empty">
+          <div class="cart-empty-icon">
+            {% render 'icon-cart' %}
+          </div>
+          <p class="cart-empty-text">Your cart is empty</p>
+          <a href="/collections/all" class="btn btn-primary">Continue Shopping</a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div> 

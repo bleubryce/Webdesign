@@ -1,0 +1,193 @@
+{% comment %}
+  Collection Highlights Section for Get Up & Down Golf Shopify Theme
+  - Showcases multiple collections with image, title, and link
+{% endcomment %}
+
+<div class="collection-highlights section" style="background-color: {{ section.settings.background_color }};">
+  <div class="container">
+    {% if section.settings.title != blank %}
+      <h2 class="section-title" style="color: {{ section.settings.title_color }};">{{ section.settings.title }}</h2>
+    {% endif %}
+    
+    {% if section.settings.subtitle != blank %}
+      <div class="section-subtitle" style="color: {{ section.settings.title_color }};">{{ section.settings.subtitle }}</div>
+    {% endif %}
+    
+    <div class="collection-highlights-grid grid-{{ section.blocks.size }}">
+      {% for block in section.blocks %}
+        {% assign collection = collections[block.settings.collection] %}
+        <div class="collection-highlight-item" {{ block.shopify_attributes }}>
+          <a href="{% if collection != blank %}{{ collection.url }}{% else %}{{ block.settings.link }}{% endif %}" class="collection-highlight-link">
+            <div class="collection-highlight-image-wrapper">
+              {% if block.settings.image != blank %}
+                <img 
+                  srcset="{% if block.settings.image.width >= 200 %}{{ block.settings.image | img_url: '200x' }} 200w,{% endif %}
+                          {% if block.settings.image.width >= 400 %}{{ block.settings.image | img_url: '400x' }} 400w,{% endif %}
+                          {% if block.settings.image.width >= 600 %}{{ block.settings.image | img_url: '600x' }} 600w,{% endif %}
+                          {% if block.settings.image.width >= 800 %}{{ block.settings.image | img_url: '800x' }} 800w,{% endif %}
+                          {{ block.settings.image | img_url: 'master' }} {{ block.settings.image.width }}w"
+                  src="{{ block.settings.image | img_url: '600x' }}"
+                  sizes="(min-width: 1200px) 33vw, (min-width: 750px) 50vw, 100vw"
+                  alt="{{ block.settings.image.alt | default: block.settings.title | escape }}"
+                  loading="lazy"
+                  width="{{ block.settings.image.width }}"
+                  height="{{ block.settings.image.height }}"
+                  class="collection-highlight-image"
+                >
+              {% elsif collection != blank and collection.image != blank %}
+                <img 
+                  srcset="{% if collection.image.width >= 200 %}{{ collection.image | img_url: '200x' }} 200w,{% endif %}
+                          {% if collection.image.width >= 400 %}{{ collection.image | img_url: '400x' }} 400w,{% endif %}
+                          {% if collection.image.width >= 600 %}{{ collection.image | img_url: '600x' }} 600w,{% endif %}
+                          {% if collection.image.width >= 800 %}{{ collection.image | img_url: '800x' }} 800w,{% endif %}
+                          {{ collection.image | img_url: 'master' }} {{ collection.image.width }}w"
+                  src="{{ collection.image | img_url: '600x' }}"
+                  sizes="(min-width: 1200px) 33vw, (min-width: 750px) 50vw, 100vw"
+                  alt="{{ collection.image.alt | default: collection.title | escape }}"
+                  loading="lazy"
+                  width="{{ collection.image.width }}"
+                  height="{{ collection.image.height }}"
+                  class="collection-highlight-image"
+                >
+              {% else %}
+                {{ 'collection-1' | placeholder_svg_tag: 'collection-highlight-image placeholder' }}
+              {% endif %}
+              
+              <div class="collection-highlight-overlay" style="background-color: {{ block.settings.overlay_color }}; opacity: {{ block.settings.overlay_opacity }}"></div>
+            </div>
+            
+            <div class="collection-highlight-content">
+              <h3 class="collection-highlight-title" style="color: {{ block.settings.text_color }};">
+                {{ block.settings.title | default: collection.title }}
+              </h3>
+              
+              {% if block.settings.text != blank %}
+                <div class="collection-highlight-text" style="color: {{ block.settings.text_color }};">
+                  {{ block.settings.text }}
+                </div>
+              {% endif %}
+              
+              {% if block.settings.button_label != blank %}
+                <span class="btn btn-primary collection-highlight-button">
+                  {{ block.settings.button_label }}
+                </span>
+              {% endif %}
+            </div>
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Collection Highlights",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Shop by Category"
+    },
+    {
+      "type": "richtext",
+      "id": "subtitle",
+      "label": "Subheading",
+      "default": "<p>Explore our collections</p>"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#F9F9F9"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Heading color",
+      "default": "#0A3B2D"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Custom image",
+          "info": "Will override collection image if set"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "info": "Will override collection title if set"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label",
+          "default": "Shop Now"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Custom link",
+          "info": "Will override collection link if set"
+        },
+        {
+          "type": "color",
+          "id": "overlay_color",
+          "label": "Overlay color",
+          "default": "#000000"
+        },
+        {
+          "type": "range",
+          "id": "overlay_opacity",
+          "min": 0,
+          "max": 1,
+          "step": 0.1,
+          "label": "Overlay opacity",
+          "default": 0.2
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text color",
+          "default": "#FFFFFF"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection Highlights",
+      "category": "Collections",
+      "blocks": [
+        {
+          "type": "collection"
+        },
+        {
+          "type": "collection"
+        },
+        {
+          "type": "collection"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

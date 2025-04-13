@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="{{ settings.primary_color }}">
+
+  <link rel="canonical" href="{{ canonical_url }}">
+  <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.shopify.com" crossorigin>
+  
+  {%- if settings.favicon != blank -%}
+    <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+  {%- endif -%}
+
+  <title>
+    {{ page_title }}
+    {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+    {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+    {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+  </title>
+
+  {% if page_description %}
+    <meta name="description" content="{{ page_description | escape }}">
+  {% endif %}
+
+  <!-- Social Meta Tags -->
+  <meta property="og:site_name" content="{{ shop.name }}">
+  <meta property="og:url" content="{{ canonical_url }}">
+  <meta property="og:title" content="{{ page_title }}">
+  <meta property="og:type" content="website">
+  <meta property="og:description" content="{{ page_description | default: shop.description | escape }}">
+  {% if page_image %}
+    <meta property="og:image" content="{{ page_image | image_url }}">
+    <meta property="og:image:secure_url" content="{{ page_image | image_url }}">
+    <meta property="og:image:width" content="{{ page_image.width }}">
+    <meta property="og:image:height" content="{{ page_image.height }}">
+  {% endif %}
+
+  <!-- Twitter Card Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ page_title }}">
+  <meta name="twitter:description" content="{{ page_description | default: shop.description | escape }}">
+
+  {{ content_for_header }}
+
+  <!-- Theme Stylesheets -->
+  {{ 'theme.css.liquid' | asset_url | stylesheet_tag }}
+  {{ 'responsive.css' | asset_url | stylesheet_tag }}
+  
+  <!-- Custom Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <!-- Theme Scripts -->
+  <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'seo-optimization.js' | asset_url }}" defer="defer"></script>
+</head>
+
+<body class="template-{{ template.name | handle }}">
+  <a class="skip-to-content-link visually-hidden" href="#MainContent">
+    {{ "accessibility.skip_to_text" | t }}
+  </a>
+
+  {% section 'announcement-bar' %}
+  {% section 'header' %}
+
+  <main id="MainContent" class="main-content" role="main" tabindex="-1">
+    {{ content_for_layout }}
+  </main>
+
+  {% section 'footer' %}
+
+  <!-- Modal Container -->
+  <div id="modal-container" class="modal-container" aria-hidden="true"></div>
+
+  <!-- Cart Drawer -->
+  {% if settings.cart_type == 'drawer' %}
+    {% render 'cart-drawer' %}
+  {% endif %}
+
+  <!-- Search Drawer -->
+  {% render 'search-drawer' %}
+</body>
+</html>

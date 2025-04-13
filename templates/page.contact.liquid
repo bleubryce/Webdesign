@@ -1,0 +1,731 @@
+{% comment %}
+  Contact Page Template for Get Up & Down Golf Shopify Theme
+  - Displays contact form, store locations, and FAQ sections
+{% endcomment %}
+
+<div class="contact-template section">
+  <div class="container">
+    {% if section.settings.show_breadcrumbs %}
+      <div class="contact-breadcrumbs">
+        <a href="/" class="contact-breadcrumb-link">Home</a>
+        <span class="contact-breadcrumb-separator">/</span>
+        <span class="contact-breadcrumb-current">Contact</span>
+      </div>
+    {% endif %}
+    
+    <div class="contact-header">
+      <h1 class="contact-title">{{ section.settings.title }}</h1>
+      
+      {% if section.settings.subtitle != blank %}
+        <div class="contact-subtitle">{{ section.settings.subtitle }}</div>
+      {% endif %}
+    </div>
+    
+    <div class="contact-content">
+      <div class="contact-main">
+        {% if section.settings.show_form %}
+          <div class="contact-form-section">
+            {% if section.settings.form_heading != blank %}
+              <h2 class="contact-section-heading">{{ section.settings.form_heading }}</h2>
+            {% endif %}
+            
+            {% if section.settings.form_text != blank %}
+              <div class="contact-section-text rte">
+                {{ section.settings.form_text }}
+              </div>
+            {% endif %}
+            
+            <div class="contact-form-wrapper">
+              {% form 'contact' %}
+                {% if form.posted_successfully? %}
+                  <div class="contact-form-success">
+                    <p class="contact-form-success-message">{{ section.settings.success_message }}</p>
+                  </div>
+                {% endif %}
+                
+                {% if form.errors %}
+                  <div class="contact-form-error">
+                    <p class="contact-form-error-message">{{ 'templates.contact.form.error_heading' | t }}</p>
+                    <ul class="contact-form-error-list">
+                      {% for field in form.errors %}
+                        <li>
+                          {% if field == 'form' %}
+                            {{ form.errors.messages[field] }}
+                          {% else %}
+                            {{ form.errors.translated_fields[field] }} {{ form.errors.messages[field] }}
+                          {% endif %}
+                        </li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                {% endif %}
+                
+                <div class="contact-form-fields">
+                  <div class="contact-form-field">
+                    <label for="ContactFormName" class="contact-form-label">{{ 'templates.contact.form.name' | t }}</label>
+                    <input 
+                      type="text" 
+                      id="ContactFormName" 
+                      name="contact[name]" 
+                      value="{% if form.name %}{{ form.name }}{% endif %}" 
+                      class="contact-form-input"
+                      required
+                    >
+                  </div>
+                  
+                  <div class="contact-form-field">
+                    <label for="ContactFormEmail" class="contact-form-label">{{ 'templates.contact.form.email' | t }}</label>
+                    <input 
+                      type="email" 
+                      id="ContactFormEmail" 
+                      name="contact[email]" 
+                      value="{% if form.email %}{{ form.email }}{% endif %}" 
+                      class="contact-form-input"
+                      required
+                      autocorrect="off"
+                      autocapitalize="off"
+                    >
+                  </div>
+                  
+                  {% if section.settings.show_phone %}
+                    <div class="contact-form-field">
+                      <label for="ContactFormPhone" class="contact-form-label">{{ 'templates.contact.form.phone' | t }}</label>
+                      <input 
+                        type="tel" 
+                        id="ContactFormPhone" 
+                        name="contact[phone]" 
+                        value="{% if form.phone %}{{ form.phone }}{% endif %}" 
+                        class="contact-form-input"
+                        {% if section.settings.phone_required %}required{% endif %}
+                      >
+                    </div>
+                  {% endif %}
+                  
+                  {% if section.settings.show_subject %}
+                    <div class="contact-form-field">
+                      <label for="ContactFormSubject" class="contact-form-label">{{ section.settings.subject_label }}</label>
+                      <input 
+                        type="text" 
+                        id="ContactFormSubject" 
+                        name="contact[subject]" 
+                        value="{% if form.subject %}{{ form.subject }}{% endif %}" 
+                        class="contact-form-input"
+                        {% if section.settings.subject_required %}required{% endif %}
+                      >
+                    </div>
+                  {% endif %}
+                  
+                  {% if section.settings.show_order_number %}
+                    <div class="contact-form-field">
+                      <label for="ContactFormOrderNumber" class="contact-form-label">{{ section.settings.order_number_label }}</label>
+                      <input 
+                        type="text" 
+                        id="ContactFormOrderNumber" 
+                        name="contact[order_number]" 
+                        value="{% if form.order_number %}{{ form.order_number }}{% endif %}" 
+                        class="contact-form-input"
+                        {% if section.settings.order_number_required %}required{% endif %}
+                      >
+                    </div>
+                  {% endif %}
+                  
+                  {% if section.settings.show_inquiry_type %}
+                    <div class="contact-form-field">
+                      <label for="ContactFormInquiryType" class="contact-form-label">{{ section.settings.inquiry_type_label }}</label>
+                      <select 
+                        id="ContactFormInquiryType" 
+                        name="contact[inquiry_type]" 
+                        class="contact-form-select"
+                        {% if section.settings.inquiry_type_required %}required{% endif %}
+                      >
+                        <option value="">{{ section.settings.inquiry_type_placeholder }}</option>
+                        {% for option in section.settings.inquiry_type_options %}
+                          <option value="{{ option }}">{{ option }}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  {% endif %}
+                  
+                  <div class="contact-form-field contact-form-field-full">
+                    <label for="ContactFormMessage" class="contact-form-label">{{ 'templates.contact.form.message' | t }}</label>
+                    <textarea 
+                      id="ContactFormMessage" 
+                      name="contact[body]" 
+                      class="contact-form-textarea"
+                      required
+                      rows="6"
+                    >{% if form.body %}{{ form.body }}{% endif %}</textarea>
+                  </div>
+                  
+                  {% if section.settings.show_newsletter_signup %}
+                    <div class="contact-form-field contact-form-field-full">
+                      <label class="contact-form-checkbox">
+                        <input 
+                          type="checkbox" 
+                          id="ContactFormSignUp" 
+                          name="contact[sign_up_for_newsletter]" 
+                          value="1"
+                          {% if form.sign_up_for_newsletter %}checked{% endif %}
+                        >
+                        <span class="contact-form-checkbox-label">{{ section.settings.newsletter_signup_label }}</span>
+                      </label>
+                    </div>
+                  {% endif %}
+                  
+                  <div class="contact-form-field contact-form-field-full">
+                    <button type="submit" class="btn btn-primary contact-form-submit">
+                      {{ section.settings.submit_button_text }}
+                    </button>
+                  </div>
+                </div>
+              {% endform %}
+            </div>
+          </div>
+        {% endif %}
+        
+        {% if section.settings.show_faq %}
+          <div class="contact-faq-section">
+            {% if section.settings.faq_heading != blank %}
+              <h2 class="contact-section-heading">{{ section.settings.faq_heading }}</h2>
+            {% endif %}
+            
+            {% if section.settings.faq_text != blank %}
+              <div class="contact-section-text rte">
+                {{ section.settings.faq_text }}
+              </div>
+            {% endif %}
+            
+            <div class="contact-faq-items">
+              {% for i in (1..6) %}
+                {% assign faq_question = 'faq_question_' | append: i %}
+                {% assign faq_answer = 'faq_answer_' | append: i %}
+                
+                {% if section.settings[faq_question] != blank %}
+                  <details class="contact-faq-item">
+                    <summary class="contact-faq-question">
+                      {{ section.settings[faq_question] }}
+                      <span class="contact-faq-icon">{% render 'icon-chevron-down' %}</span>
+                    </summary>
+                    <div class="contact-faq-answer rte">
+                      {{ section.settings[faq_answer] }}
+                    </div>
+                  </details>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+      
+      <div class="contact-sidebar">
+        {% if section.settings.show_info %}
+          <div class="contact-info-section">
+            {% if section.settings.info_heading != blank %}
+              <h2 class="contact-section-heading">{{ section.settings.info_heading }}</h2>
+            {% endif %}
+            
+            <div class="contact-info-items">
+              {% if section.settings.show_address and section.settings.address != blank %}
+                <div class="contact-info-item">
+                  <div class="contact-info-icon">
+                    {% render 'icon-map-pin' %}
+                  </div>
+                  <div class="contact-info-content">
+                    <h3 class="contact-info-title">{{ section.settings.address_title }}</h3>
+                    <div class="contact-info-text rte">
+                      {{ section.settings.address }}
+                    </div>
+                  </div>
+                </div>
+              {% endif %}
+              
+              {% if section.settings.show_phone_info and section.settings.phone != blank %}
+                <div class="contact-info-item">
+                  <div class="contact-info-icon">
+                    {% render 'icon-phone' %}
+                  </div>
+                  <div class="contact-info-content">
+                    <h3 class="contact-info-title">{{ section.settings.phone_title }}</h3>
+                    <div class="contact-info-text">
+                      <a href="tel:{{ section.settings.phone | remove: ' ' | remove: '(' | remove: ')' | remove: '-' }}">{{ section.settings.phone }}</a>
+                    </div>
+                  </div>
+                </div>
+              {% endif %}
+              
+              {% if section.settings.show_email_info and section.settings.email != blank %}
+                <div class="contact-info-item">
+                  <div class="contact-info-icon">
+                    {% render 'icon-email' %}
+                  </div>
+                  <div class="contact-info-content">
+                    <h3 class="contact-info-title">{{ section.settings.email_title }}</h3>
+                    <div class="contact-info-text">
+                      <a href="mailto:{{ section.settings.email }}">{{ section.settings.email }}</a>
+                    </div>
+                  </div>
+                </div>
+              {% endif %}
+              
+              {% if section.settings.show_hours and section.settings.hours != blank %}
+                <div class="contact-info-item">
+                  <div class="contact-info-icon">
+                    {% render 'icon-clock' %}
+                  </div>
+                  <div class="contact-info-content">
+                    <h3 class="contact-info-title">{{ section.settings.hours_title }}</h3>
+                    <div class="contact-info-text rte">
+                      {{ section.settings.hours }}
+                    </div>
+                  </div>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
+        
+        {% if section.settings.show_map and section.settings.map_address != blank %}
+          <div class="contact-map-section">
+            {% if section.settings.map_heading != blank %}
+              <h2 class="contact-section-heading">{{ section.settings.map_heading }}</h2>
+            {% endif %}
+            
+            <div class="contact-map-wrapper">
+              <div class="contact-map">
+                <iframe 
+                  src="https://maps.google.com/maps?q={{ section.settings.map_address | url_encode }}&t=m&z={{ section.settings.map_zoom }}&output=embed&iwloc=near" 
+                  width="600" 
+                  height="450" 
+                  style="border:0;" 
+                  allowfullscreen="" 
+                  loading="lazy" 
+                  referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+              </div>
+            </div>
+          </div>
+        {% endif %}
+        
+        {% if section.settings.show_social %}
+          <div class="contact-social-section">
+            {% if section.settings.social_heading != blank %}
+              <h2 class="contact-section-heading">{{ section.settings.social_heading }}</h2>
+            {% endif %}
+            
+            <div class="contact-social-links">
+              {% if settings.social_facebook_link != blank %}
+                <a href="{{ settings.social_facebook_link }}" class="contact-social-link" target="_blank" rel="noopener" aria-label="Facebook">
+                  {% render 'icon-facebook' %}
+                </a>
+              {% endif %}
+              
+              {% if settings.social_instagram_link != blank %}
+                <a href="{{ settings.social_instagram_link }}" class="contact-social-link" target="_blank" rel="noopener" aria-label="Instagram">
+                  {% render 'icon-instagram' %}
+                </a>
+              {% endif %}
+              
+              {% if settings.social_twitter_link != blank %}
+                <a href="{{ settings.social_twitter_link }}" class="contact-social-link" target="_blank" rel="noopener" aria-label="Twitter">
+                  {% render 'icon-twitter' %}
+                </a>
+              {% endif %}
+              
+              {% if settings.social_youtube_link != blank %}
+                <a href="{{ settings.social_youtube_link }}" class="contact-social-link" target="_blank" rel="noopener" aria-label="YouTube">
+                  {% render 'icon-youtube' %}
+                </a>
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Contact Page",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_breadcrumbs",
+      "label": "Show breadcrumbs",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Contact Us"
+    },
+    {
+      "type": "richtext",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "<p>We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Contact Form"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_form",
+      "label": "Show contact form",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "form_heading",
+      "label": "Form heading",
+      "default": "Send Us a Message"
+    },
+    {
+      "type": "richtext",
+      "id": "form_text",
+      "label": "Form text",
+      "default": "<p>Have a question about our products or services? Fill out the form below and we'll get back to you as soon as possible.</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_phone",
+      "label": "Show phone field",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "phone_required",
+      "label": "Phone field required",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_subject",
+      "label": "Show subject field",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "subject_label",
+      "label": "Subject field label",
+      "default": "Subject"
+    },
+    {
+      "type": "checkbox",
+      "id": "subject_required",
+      "label": "Subject field required",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_order_number",
+      "label": "Show order number field",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "order_number_label",
+      "label": "Order number field label",
+      "default": "Order Number (if applicable)"
+    },
+    {
+      "type": "checkbox",
+      "id": "order_number_required",
+      "label": "Order number field required",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_inquiry_type",
+      "label": "Show inquiry type dropdown",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "inquiry_type_label",
+      "label": "Inquiry type field label",
+      "default": "What can we help you with?"
+    },
+    {
+      "type": "text",
+      "id": "inquiry_type_placeholder",
+      "label": "Inquiry type placeholder",
+      "default": "Please select..."
+    },
+    {
+      "type": "textarea",
+      "id": "inquiry_type_options",
+      "label": "Inquiry type options",
+      "default": "Product Question\nOrder Status\nReturns & Exchanges\nWholesale Inquiry\nCustom Order\nOther",
+      "info": "Add each option on a new line"
+    },
+    {
+      "type": "checkbox",
+      "id": "inquiry_type_required",
+      "label": "Inquiry type field required",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_newsletter_signup",
+      "label": "Show newsletter signup checkbox",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "newsletter_signup_label",
+      "label": "Newsletter signup label",
+      "default": "Sign up for our newsletter to receive updates and exclusive offers"
+    },
+    {
+      "type": "text",
+      "id": "submit_button_text",
+      "label": "Submit button text",
+      "default": "Send Message"
+    },
+    {
+      "type": "text",
+      "id": "success_message",
+      "label": "Success message",
+      "default": "Thanks for contacting us! We'll get back to you as soon as possible."
+    },
+    {
+      "type": "header",
+      "content": "Contact Information"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_info",
+      "label": "Show contact information",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "info_heading",
+      "label": "Information heading",
+      "default": "Get in Touch"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_address",
+      "label": "Show address",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "address_title",
+      "label": "Address title",
+      "default": "Our Location"
+    },
+    {
+      "type": "richtext",
+      "id": "address",
+      "label": "Address",
+      "default": "<p>123 Golf Avenue<br>Los Angeles, CA 90001<br>United States</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_phone_info",
+      "label": "Show phone",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "phone_title",
+      "label": "Phone title",
+      "default": "Phone"
+    },
+    {
+      "type": "text",
+      "id": "phone",
+      "label": "Phone number",
+      "default": "(555) 123-4567"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_email_info",
+      "label": "Show email",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "email_title",
+      "label": "Email title",
+      "default": "Email"
+    },
+    {
+      "type": "text",
+      "id": "email",
+      "label": "Email address",
+      "default": "info@getupanddowngolf.com"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_hours",
+      "label": "Show business hours",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "hours_title",
+      "label": "Hours title",
+      "default": "Business Hours"
+    },
+    {
+      "type": "richtext",
+      "id": "hours",
+      "label": "Business hours",
+      "default": "<p>Monday - Friday: 9am - 5pm<br>Saturday: 10am - 4pm<br>Sunday: Closed</p>"
+    },
+    {
+      "type": "header",
+      "content": "Map"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_map",
+      "label": "Show map",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "map_heading",
+      "label": "Map heading",
+      "default": "Find Us"
+    },
+    {
+      "type": "text",
+      "id": "map_address",
+      "label": "Map address",
+      "default": "Los Angeles, CA",
+      "info": "Used for Google Maps embed"
+    },
+    {
+      "type": "range",
+      "id": "map_zoom",
+      "min": 1,
+      "max": 20,
+      "step": 1,
+      "label": "Map zoom level",
+      "default": 14
+    },
+    {
+      "type": "header",
+      "content": "Social Media"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social",
+      "label": "Show social media links",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "social_heading",
+      "label": "Social media heading",
+      "default": "Follow Us"
+    },
+    {
+      "type": "header",
+      "content": "FAQ Section"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_faq",
+      "label": "Show FAQ section",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "faq_heading",
+      "label": "FAQ heading",
+      "default": "Frequently Asked Questions"
+    },
+    {
+      "type": "richtext",
+      "id": "faq_text",
+      "label": "FAQ text",
+      "default": "<p>Find answers to our most commonly asked questions below.</p>"
+    },
+    {
+      "type": "text",
+      "id": "faq_question_1",
+      "label": "Question 1",
+      "default": "What is your return policy?"
+    },
+    {
+      "type": "richtext",
+      "id": "faq_answer_1",
+      "label": "Answer 1",
+      "default": "<p>We offer a 30-day return policy on all unworn items with original tags attached. Please contact us for a return authorization before sending any items back.</p>"
+    },
+    {
+      "type": "text",
+      "id": "faq_question_2",
+      "label": "Question 2",
+      "default": "How long does shipping take?"
+    },
+    {
+      "type": "richtext",
+      "id": "faq_answer_2",
+      "label": "Answer 2",
+      "default": "<p>Standard shipping typically takes 3-5 business days within the continental US. Express shipping options are available at checkout.</p>"
+    },
+    {
+      "type": "text",
+      "id": "faq_question_3",
+      "label": "Question 3",
+      "default": "Do you ship internationally?"
+    },
+    {
+      "type": "richtext",
+      "id": "faq_answer_3",
+      "label": "Answer 3",
+      "default": "<p>Yes, we ship to most countries worldwide. International shipping times vary by location, typically 7-14 business days.</p>"
+    },
+    {
+      "type": "text",
+      "id": "faq_question_4",
+      "label": "Question 4",
+      "default": "How do I find my size?"
+    },
+    {
+      "type": "richtext",
+      "id": "faq_answer_4",
+      "label": "Answer 4",
+      "default": "<p>You can find detailed size charts on each product page. If you're between sizes, we generally recommend sizing up for a more comfortable fit.</p>"
+    },
+    {
+      "type": "text",
+      "id": "faq_question_5",
+      "label": "Question 5",
+      "default": "Do you offer wholesale opportunities?"
+    },
+    {
+      "type": "richtext",
+      "id": "faq_answer_5",
+      "label": "Answer 5",
+      "default": "<p>Yes, we offer wholesale partnerships for qualified retailers. Please contact us at wholesale@getupanddowngolf.com for more information.</p>"
+    },
+    {
+      "type": "text",
+      "id": "faq_question_6",
+      "label": "Question 6",
+      "default": "How can I track my order?"
+    },
+    {
+      "type": "richtext",
+      "id": "faq_answer_6",
+      "label": "Answer 6",
+      "default": "<p>Once your order ships, you'll receive a confirmation email with tracking information. You can also track your order in your account dashboard.</p>"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Contact Page"
+    }
+  ]
+}
+{% endschema %}

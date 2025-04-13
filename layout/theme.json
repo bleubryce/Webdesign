@@ -1,0 +1,64 @@
+{
+  "sections": {
+    "header": {
+      "type": "header",
+      "settings": {
+        "logo": "shopify:\/\/shop_images\/get-up-and-down-golf-logo.png",
+        "logo_width": 180,
+        "sticky_header": true,
+        "menu": "main-menu",
+        "show_search": true,
+        "show_cart": true
+      }
+    },
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "footer_block_1": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Shop",
+            "menu": "footer-shop"
+          }
+        },
+        "footer_block_2": {
+          "type": "link_list",
+          "settings": {
+            "heading": "About",
+            "menu": "footer-about"
+          }
+        },
+        "footer_block_3": {
+          "type": "text",
+          "settings": {
+            "heading": "Get Up & Down Golf",
+            "text": "<p>Premium golf apparel and accessories that blend performance and lifestyle. Golf For the Culture.</p>"
+          }
+        },
+        "footer_block_4": {
+          "type": "newsletter",
+          "settings": {
+            "heading": "Subscribe",
+            "text": "Sign up for exclusive offers, original stories, events and more."
+          }
+        }
+      },
+      "block_order": [
+        "footer_block_3",
+        "footer_block_1",
+        "footer_block_2",
+        "footer_block_4"
+      ],
+      "settings": {
+        "show_payment_icons": true,
+        "show_social_icons": true,
+        "show_copyright": true
+      }
+    }
+  },
+  "order": [
+    "header",
+    "main",
+    "footer"
+  ]
+}

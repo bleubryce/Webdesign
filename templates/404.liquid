@@ -1,0 +1,83 @@
+{% layout 'theme' %}
+
+<div class="page-width page-404">
+  <div class="section-header text-center">
+    <h1 class="h2">{{ 'general.404.title' | t }}</h1>
+    <p>{{ 'general.404.subtext' | t }}</p>
+  </div>
+
+  <div class="text-center">
+    <div class="rte">
+      <p>{{ 'general.404.message' | t }}</p>
+    </div>
+
+    <div class="search-404">
+      <form action="/search" method="get" class="search-form" role="search">
+        <div class="search-form__input-wrapper">
+          <input
+            type="search"
+            name="q"
+            id="Search-404"
+            class="search-form__input"
+            placeholder="{{ 'general.404.search_placeholder' | t }}"
+            aria-label="{{ 'general.404.search_placeholder' | t }}"
+          >
+          <button type="submit" class="search-form__button">
+            {% render 'icon-search' %}
+            <span class="visually-hidden">{{ 'general.search.submit' | t }}</span>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div class="404-buttons">
+      <a href="/" class="btn">{{ 'general.404.back_to_home' | t }}</a>
+      <a href="/collections/all" class="btn btn--secondary">{{ 'general.404.shop_now' | t }}</a>
+    </div>
+  </div>
+</div>
+
+{% style %}
+.page-404 {
+  padding: 60px 0;
+  text-align: center;
+}
+
+.page-404 .section-header {
+  margin-bottom: 40px;
+}
+
+.search-404 {
+  max-width: 500px;
+  margin: 30px auto;
+}
+
+.search-form__input-wrapper {
+  position: relative;
+}
+
+.search-form__input {
+  width: 100%;
+  padding: 10px 40px 10px 15px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+}
+
+.search-form__button {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.404-buttons {
+  margin-top: 30px;
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+{% endstyle %} 

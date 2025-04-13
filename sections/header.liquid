@@ -1,0 +1,229 @@
+{% comment %}
+  Header Section for Get Up & Down Golf Shopify Theme
+  - Includes logo, navigation, search, and cart
+{% endcomment %}
+
+<header class="site-header {% if section.settings.sticky_header %}header-sticky{% endif %}">
+  <div class="container">
+    <div class="header-wrapper">
+      <div class="header-logo">
+        <a href="/" class="header-logo-link">
+          {% if section.settings.logo != blank %}
+            <img 
+              src="{{ section.settings.logo | img_url: 'master' }}" 
+              alt="{{ shop.name }}" 
+              width="{{ section.settings.logo_width }}" 
+              height="auto" 
+              loading="eager"
+              class="header-logo-image"
+            >
+          {% else %}
+            <span class="header-logo-text">{{ shop.name }}</span>
+          {% endif %}
+        </a>
+      </div>
+
+      <nav class="header-navigation" role="navigation">
+        <ul class="header-menu">
+          {% for link in section.settings.menu.links %}
+            {% assign child_list_handle = link.title | handleize %}
+            {% if link.links != blank %}
+              <li class="header-menu-item has-mega-menu">
+                <a href="{{ link.url }}" class="header-menu-link">
+                  {{ link.title }}
+                  <span class="icon-dropdown">{% render 'icon-chevron-down' %}</span>
+                </a>
+                <div class="mega-menu">
+                  <div class="container">
+                    <div class="mega-menu-wrapper">
+                      {% if link.levels == 1 %}
+                        <ul class="mega-menu-links">
+                          {% for childlink in link.links %}
+                            <li>
+                              <a href="{{ childlink.url }}">{{ childlink.title }}</a>
+                            </li>
+                          {% endfor %}
+                        </ul>
+                      {% else %}
+                        <div class="mega-menu-columns">
+                          {% for childlink in link.links %}
+                            <div class="mega-menu-column">
+                              <h4 class="mega-menu-title">
+                                <a href="{{ childlink.url }}">{{ childlink.title }}</a>
+                              </h4>
+                              {% if childlink.links != blank %}
+                                <ul class="mega-menu-sublinks">
+                                  {% for grandchildlink in childlink.links %}
+                                    <li>
+                                      <a href="{{ grandchildlink.url }}">{{ grandchildlink.title }}</a>
+                                    </li>
+                                  {% endfor %}
+                                </ul>
+                              {% endif %}
+                            </div>
+                          {% endfor %}
+                        </div>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              </li>
+            {% else %}
+              <li class="header-menu-item">
+                <a href="{{ link.url }}" class="header-menu-link">{{ link.title }}</a>
+              </li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        {% if section.settings.show_search %}
+          <div class="header-search">
+            <button type="button" class="header-search-toggle" aria-label="Search">
+              {% render 'icon-search' %}
+            </button>
+          </div>
+        {% endif %}
+
+        {% if section.settings.show_cart %}
+          <div class="header-cart">
+            <a href="/cart" class="header-cart-link cart-toggle" aria-label="Cart">
+              {% render 'icon-cart' %}
+              <span class="cart-count {% if cart.item_count > 0 %}has-items{% endif %}">
+                {{ cart.item_count }}
+              </span>
+            </a>
+          </div>
+        {% endif %}
+
+        <button type="button" class="mobile-menu-toggle" aria-label="Menu">
+          {% render 'icon-hamburger' %}
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-menu">
+  <div class="mobile-menu-header">
+    <button type="button" class="mobile-menu-close" aria-label="Close menu">
+      {% render 'icon-close' %}
+    </button>
+  </div>
+  <div class="mobile-menu-content">
+    <nav class="mobile-navigation">
+      <ul class="mobile-menu-items">
+        {% for link in section.settings.menu.links %}
+          {% if link.links != blank %}
+            <li class="mobile-menu-item has-submenu">
+              <a href="{{ link.url }}" class="mobile-menu-link">{{ link.title }}</a>
+              <button class="mobile-submenu-toggle" aria-label="Toggle submenu">
+                {% render 'icon-plus' %}
+              </button>
+              <ul class="mobile-submenu">
+                {% for childlink in link.links %}
+                  {% if childlink.links != blank %}
+                    <li class="mobile-menu-item has-submenu">
+                      <a href="{{ childlink.url }}" class="mobile-menu-link">{{ childlink.title }}</a>
+                      <button class="mobile-submenu-toggle" aria-label="Toggle submenu">
+                        {% render 'icon-plus' %}
+                      </button>
+                      <ul class="mobile-submenu">
+                        {% for grandchildlink in childlink.links %}
+                          <li class="mobile-menu-item">
+                            <a href="{{ grandchildlink.url }}" class="mobile-menu-link">{{ grandchildlink.title }}</a>
+                          </li>
+                        {% endfor %}
+                      </ul>
+                    </li>
+                  {% else %}
+                    <li class="mobile-menu-item">
+                      <a href="{{ childlink.url }}" class="mobile-menu-link">{{ childlink.title }}</a>
+                    </li>
+                  {% endif %}
+                {% endfor %}
+              </ul>
+            </li>
+          {% else %}
+            <li class="mobile-menu-item">
+              <a href="{{ link.url }}" class="mobile-menu-link">{{ link.title }}</a>
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </nav>
+  </div>
+</div>
+
+<div class="mobile-menu-overlay"></div>
+
+{% if section.settings.show_search %}
+  <div class="search-drawer">
+    <div class="search-drawer-header">
+      <h2 class="search-drawer-title">{{ 'general.search.title' | t }}</h2>
+      <button type="button" class="search-drawer-close" aria-label="Close search">
+        {% render 'icon-close' %}
+      </button>
+    </div>
+    <div class="search-drawer-content">
+      <form action="/search" method="get" class="search-form" role="search">
+        <div class="search-form-field">
+          <input type="search" name="q" placeholder="{{ 'general.search.placeholder' | t }}" class="search-input" aria-label="{{ 'general.search.placeholder' | t }}" autocomplete="off">
+          <button type="submit" class="search-submit" aria-label="Submit search">
+            {% render 'icon-search' %}
+          </button>
+        </div>
+      </form>
+      <div class="search-results"></div>
+    </div>
+  </div>
+  <div class="search-drawer-overlay"></div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "min": 50,
+      "max": 300,
+      "step": 10,
+      "unit": "px",
+      "label": "Logo width",
+      "default": 180
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky_header",
+      "label": "Sticky header",
+      "default": true
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_search",
+      "label": "Show search",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cart",
+      "label": "Show cart",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

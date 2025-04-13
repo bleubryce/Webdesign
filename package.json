@@ -1,0 +1,27 @@
+{
+  "name": "get-up-and-down-golf-shopify",
+  "version": "1.0.0",
+  "description": "Get Up & Down Golf Shopify Theme",
+  "main": "index.js",
+  "scripts": {
+    "dev": "shopify theme dev",
+    "push": "shopify theme push",
+    "pull": "shopify theme pull",
+    "deploy": "shopify theme deploy",
+    "check": "shopify theme check",
+    "serve": "shopify theme serve",
+    "login": "shopify auth login"
+  },
+  "keywords": [
+    "shopify",
+    "theme",
+    "golf",
+    "ecommerce"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@shopify/cli": "latest",
+    "@shopify/theme": "latest"
+  }
+} 

@@ -1,0 +1,61 @@
+{% comment %}
+  Search Drawer Template
+  - Displays a sliding search drawer with search input and results
+{% endcomment %}
+
+<div id="search-drawer" class="search-drawer" aria-hidden="true">
+  <div class="search-drawer-overlay"></div>
+  
+  <div class="search-drawer-content">
+    <div class="search-drawer-header">
+      <form action="/search" method="get" class="search-form" role="search">
+        <div class="search-input-wrapper">
+          <input
+            type="search"
+            name="q"
+            class="search-input"
+            placeholder="Search products..."
+            aria-label="Search"
+            autocomplete="off"
+          >
+          <button type="submit" class="search-submit" aria-label="Search">
+            {% render 'icon-search' %}
+          </button>
+        </div>
+      </form>
+      <button class="search-drawer-close" aria-label="Close search">
+        {% render 'icon-close' %}
+      </button>
+    </div>
+
+    <div class="search-results">
+      <div class="search-results-products">
+        <h3 class="search-results-title">Products</h3>
+        <div class="search-results-grid"></div>
+      </div>
+
+      <div class="search-results-collections">
+        <h3 class="search-results-title">Collections</h3>
+        <div class="search-results-list"></div>
+      </div>
+
+      <div class="search-results-pages">
+        <h3 class="search-results-title">Pages</h3>
+        <div class="search-results-list"></div>
+      </div>
+    </div>
+
+    <div class="search-loading">
+      <div class="search-loading-spinner"></div>
+      <p class="search-loading-text">Searching...</p>
+    </div>
+
+    <div class="search-empty">
+      <div class="search-empty-icon">
+        {% render 'icon-search' %}
+      </div>
+      <p class="search-empty-text">No results found</p>
+      <p class="search-empty-subtext">Try checking your spelling or using more general terms</p>
+    </div>
+  </div>
+</div> 

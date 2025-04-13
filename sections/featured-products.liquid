@@ -1,0 +1,217 @@
+{% comment %}
+  Featured Products Section for Get Up & Down Golf Shopify Theme
+  - Displays a curated selection of products in a grid or slider format
+{% endcomment %}
+
+<div class="featured-products section" style="background-color: {{ section.settings.background_color }};">
+  <div class="container">
+    {% if section.settings.title != blank %}
+      <h2 class="section-title" style="color: {{ section.settings.title_color }};">{{ section.settings.title }}</h2>
+    {% endif %}
+    
+    {% if section.settings.subtitle != blank %}
+      <div class="section-subtitle" style="color: {{ section.settings.title_color }};">{{ section.settings.subtitle }}</div>
+    {% endif %}
+    
+    <div class="featured-products-wrapper {% if section.settings.enable_slider %}featured-products-slider{% else %}featured-products-grid{% endif %}">
+      {% if section.settings.enable_slider %}
+        <div class="featured-products-slider-container">
+          <div class="featured-products-slides">
+      {% endif %}
+      
+      {% assign collection = collections[section.settings.collection] %}
+      {% assign product_limit = section.settings.products_to_show %}
+      
+      {% if collection != blank and collection.products.size > 0 %}
+        {% for product in collection.products limit: product_limit %}
+          <div class="featured-product {% if section.settings.enable_slider %}featured-products-slide{% endif %}">
+            <div class="product-card">
+              <a href="{{ product.url }}" class="product-card-link">
+                <div class="product-card-image-wrapper">
+                  {% if product.featured_image != blank %}
+                    <img 
+                      srcset="{% if product.featured_image.width >= 200 %}{{ product.featured_image | img_url: '200x' }} 200w,{% endif %}
+                              {% if product.featured_image.width >= 400 %}{{ product.featured_image | img_url: '400x' }} 400w,{% endif %}
+                              {% if product.featured_image.width >= 600 %}{{ product.featured_image | img_url: '600x' }} 600w,{% endif %}
+                              {% if product.featured_image.width >= 800 %}{{ product.featured_image | img_url: '800x' }} 800w,{% endif %}
+                              {{ product.featured_image | img_url: 'master' }} {{ product.featured_image.width }}w"
+                      src="{{ product.featured_image | img_url: '400x' }}"
+                      sizes="(min-width: 1200px) 25vw, (min-width: 750px) 33vw, 50vw"
+                      alt="{{ product.featured_image.alt | escape }}"
+                      loading="lazy"
+                      width="{{ product.featured_image.width }}"
+                      height="{{ product.featured_image.height }}"
+                      class="product-card-image"
+                    >
+                  {% else %}
+                    {{ 'product-1' | placeholder_svg_tag: 'product-card-image placeholder' }}
+                  {% endif %}
+                  
+                  {% if product.compare_at_price > product.price %}
+                    <span class="product-card-badge sale">Sale</span>
+                  {% endif %}
+                  
+                  {% if product.available == false %}
+                    <span class="product-card-badge sold-out">Sold Out</span>
+                  {% endif %}
+                </div>
+                
+                <div class="product-card-info">
+                  {% if section.settings.show_vendor %}
+                    <p class="product-card-vendor">{{ product.vendor }}</p>
+                  {% endif %}
+                  
+                  <h3 class="product-card-title">{{ product.title }}</h3>
+                  
+                  <div class="product-card-price">
+                    {% if product.compare_at_price > product.price %}
+                      <span class="product-price-sale">{{ product.price | money }}</span>
+                      <span class="product-price-compare">{{ product.compare_at_price | money }}</span>
+                    {% else %}
+                      <span class="product-price">{{ product.price | money }}</span>
+                    {% endif %}
+                  </div>
+                </div>
+              </a>
+              
+              {% if section.settings.show_quick_add %}
+                <div class="product-card-actions">
+                  {% if product.available and product.variants.size == 1 %}
+                    <form method="post" action="/cart/add" class="product-card-form">
+                      <input type="hidden" name="id" value="{{ product.variants.first.id }}">
+                      <button type="submit" class="btn btn-primary product-card-add">
+                        {{ section.settings.quick_add_text }}
+                      </button>
+                    </form>
+                  {% else %}
+                    <a href="{{ product.url }}" class="btn btn-primary product-card-view">
+                      {{ section.settings.view_product_text }}
+                    </a>
+                  {% endif %}
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="featured-products-empty">
+          <p>{{ 'sections.featured_products.no_products' | t }}</p>
+          <p>{{ 'sections.featured_products.admin_instructions' | t }}</p>
+        </div>
+      {% endif %}
+      
+      {% if section.settings.enable_slider %}
+          </div>
+          
+          <button type="button" class="slider-prev" aria-label="Previous slide">
+            {% render 'icon-chevron-left' %}
+          </button>
+          <button type="button" class="slider-next" aria-label="Next slide">
+            {% render 'icon-chevron-right' %}
+          </button>
+        </div>
+      {% endif %}
+    </div>
+    
+    {% if section.settings.view_all_link != blank and section.settings.view_all_text != blank %}
+      <div class="featured-products-footer">
+        <a href="{{ section.settings.view_all_link }}" class="btn btn-secondary featured-products-view-all">
+          {{ section.settings.view_all_text }}
+        </a>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Featured Products",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Featured Products"
+    },
+    {
+      "type": "richtext",
+      "id": "subtitle",
+      "label": "Subheading",
+      "default": "<p>Shop our most popular items</p>"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "label": "Products to show",
+      "default": 4
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_slider",
+      "label": "Enable slider",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show vendor",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_quick_add",
+      "label": "Show quick add button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "quick_add_text",
+      "label": "Quick add button text",
+      "default": "Add to Cart"
+    },
+    {
+      "type": "text",
+      "id": "view_product_text",
+      "label": "View product button text",
+      "default": "View Details"
+    },
+    {
+      "type": "text",
+      "id": "view_all_text",
+      "label": "View all button text",
+      "default": "View All Products"
+    },
+    {
+      "type": "url",
+      "id": "view_all_link",
+      "label": "View all button link"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Heading color",
+      "default": "#0A3B2D"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Products",
+      "category": "Products"
+    }
+  ]
+}
+{% endschema %}

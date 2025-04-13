@@ -1,0 +1,179 @@
+{% comment %}
+  Testimonials Section for Get Up & Down Golf Shopify Theme
+  - Displays customer testimonials in a slider or grid format
+{% endcomment %}
+
+<div class="testimonials-section section" style="background-color: {{ section.settings.background_color }};">
+  <div class="container">
+    {% if section.settings.title != blank %}
+      <h2 class="section-title" style="color: {{ section.settings.title_color }};">{{ section.settings.title }}</h2>
+    {% endif %}
+    
+    {% if section.settings.subtitle != blank %}
+      <div class="section-subtitle" style="color: {{ section.settings.title_color }};">{{ section.settings.subtitle }}</div>
+    {% endif %}
+    
+    <div class="testimonials-wrapper {% if section.settings.enable_slider %}testimonials-slider{% else %}testimonials-grid{% endif %}">
+      {% if section.settings.enable_slider %}
+        <div class="testimonials-slider-container">
+          <div class="testimonials-slides">
+      {% endif %}
+      
+      {% for block in section.blocks %}
+        <div class="testimonial-item {% if section.settings.enable_slider %}testimonial-slide{% endif %}" {{ block.shopify_attributes }}>
+          <div class="testimonial-content">
+            {% if block.settings.rating > 0 %}
+              <div class="testimonial-rating">
+                {% for i in (1..5) %}
+                  {% if i <= block.settings.rating %}
+                    {% render 'icon-star-filled' %}
+                  {% else %}
+                    {% render 'icon-star-empty' %}
+                  {% endif %}
+                {% endfor %}
+              </div>
+            {% endif %}
+            
+            {% if block.settings.quote != blank %}
+              <blockquote class="testimonial-quote">
+                {{ block.settings.quote }}
+              </blockquote>
+            {% endif %}
+            
+            <div class="testimonial-author">
+              {% if block.settings.author_image != blank %}
+                <div class="testimonial-author-image">
+                  <img 
+                    src="{{ block.settings.author_image | img_url: '100x' }}"
+                    alt="{{ block.settings.author_name }}"
+                    loading="lazy"
+                    width="60"
+                    height="60"
+                  >
+                </div>
+              {% endif %}
+              
+              <div class="testimonial-author-info">
+                {% if block.settings.author_name != blank %}
+                  <div class="testimonial-author-name">{{ block.settings.author_name }}</div>
+                {% endif %}
+                
+                {% if block.settings.author_title != blank %}
+                  <div class="testimonial-author-title">{{ block.settings.author_title }}</div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+      
+      {% if section.settings.enable_slider %}
+          </div>
+          
+          <button type="button" class="slider-prev" aria-label="Previous testimonial">
+            {% render 'icon-chevron-left' %}
+          </button>
+          <button type="button" class="slider-next" aria-label="Next testimonial">
+            {% render 'icon-chevron-right' %}
+          </button>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Testimonials",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "What Our Customers Say"
+    },
+    {
+      "type": "richtext",
+      "id": "subtitle",
+      "label": "Subheading",
+      "default": "<p>Read reviews from golfers who love our products</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_slider",
+      "label": "Enable slider",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#F9F9F9"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Heading color",
+      "default": "#0A3B2D"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "quote",
+          "label": "Quote",
+          "default": "<p>\"The quality of these golf shirts is incredible. Perfect fit, great performance on the course, and stylish enough to wear anywhere.\"</p>"
+        },
+        {
+          "type": "range",
+          "id": "rating",
+          "min": 0,
+          "max": 5,
+          "step": 1,
+          "label": "Rating",
+          "default": 5,
+          "info": "Set to 0 to hide rating"
+        },
+        {
+          "type": "text",
+          "id": "author_name",
+          "label": "Author name",
+          "default": "John Smith"
+        },
+        {
+          "type": "text",
+          "id": "author_title",
+          "label": "Author title",
+          "default": "Golf Enthusiast"
+        },
+        {
+          "type": "image_picker",
+          "id": "author_image",
+          "label": "Author image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Testimonials",
+      "category": "Text",
+      "blocks": [
+        {
+          "type": "testimonial"
+        },
+        {
+          "type": "testimonial"
+        },
+        {
+          "type": "testimonial"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

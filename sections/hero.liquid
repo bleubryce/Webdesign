@@ -1,0 +1,192 @@
+{% comment %}
+  Homepage Hero Section for Get Up & Down Golf Shopify Theme
+  - Features a full-width hero image/video with overlay text and CTA button
+{% endcomment %}
+
+<div class="hero-section {% if section.settings.full_height %}hero-full-height{% endif %}" style="background-color: {{ section.settings.background_color }};">
+  {% if section.settings.video_url != blank and section.settings.show_video %}
+    <div class="hero-video-container">
+      <video class="hero-video" autoplay muted loop playsinline poster="{{ section.settings.image | img_url: 'master' }}">
+        <source src="{{ section.settings.video_url }}" type="video/mp4">
+      </video>
+    </div>
+  {% elsif section.settings.image != blank %}
+    <div class="hero-image-container">
+      <img 
+        srcset="{% if section.settings.image.width >= 375 %}{{ section.settings.image | img_url: '375x' }} 375w,{% endif %}
+                {% if section.settings.image.width >= 720 %}{{ section.settings.image | img_url: '720x' }} 720w,{% endif %}
+                {% if section.settings.image.width >= 1080 %}{{ section.settings.image | img_url: '1080x' }} 1080w,{% endif %}
+                {% if section.settings.image.width >= 1500 %}{{ section.settings.image | img_url: '1500x' }} 1500w,{% endif %}
+                {% if section.settings.image.width >= 2000 %}{{ section.settings.image | img_url: '2000x' }} 2000w,{% endif %}
+                {{ section.settings.image | img_url: 'master' }} {{ section.settings.image.width }}w"
+        src="{{ section.settings.image | img_url: '1500x' }}"
+        sizes="100vw"
+        alt="{{ section.settings.image.alt | escape }}"
+        loading="eager"
+        width="{{ section.settings.image.width }}"
+        height="{{ section.settings.image.height }}"
+        class="hero-image"
+      >
+    </div>
+  {% endif %}
+
+  <div class="hero-overlay" style="background-color: {{ section.settings.overlay_color }}; opacity: {{ section.settings.overlay_opacity }}"></div>
+
+  <div class="container">
+    <div class="hero-content" style="text-align: {{ section.settings.text_alignment }};">
+      {% if section.settings.subheading != blank %}
+        <p class="hero-subheading" style="color: {{ section.settings.text_color }};">{{ section.settings.subheading }}</p>
+      {% endif %}
+      
+      {% if section.settings.heading != blank %}
+        <h1 class="hero-heading" style="color: {{ section.settings.text_color }};">{{ section.settings.heading }}</h1>
+      {% endif %}
+      
+      {% if section.settings.text != blank %}
+        <div class="hero-text" style="color: {{ section.settings.text_color }};">
+          {{ section.settings.text }}
+        </div>
+      {% endif %}
+      
+      {% if section.settings.button_label != blank %}
+        <a href="{{ section.settings.button_link }}" class="btn btn-primary hero-button">
+          {{ section.settings.button_label }}
+        </a>
+      {% endif %}
+      
+      {% if section.settings.secondary_button_label != blank %}
+        <a href="{{ section.settings.secondary_button_link }}" class="btn btn-secondary hero-button-secondary">
+          {{ section.settings.secondary_button_label }}
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Hero Section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background Image"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_video",
+      "label": "Show video",
+      "default": false,
+      "info": "Video will take priority over the background image"
+    },
+    {
+      "type": "text",
+      "id": "video_url",
+      "label": "Video URL",
+      "info": "MP4 format recommended"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_height",
+      "label": "Full height section",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#0A3B2D"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 1,
+      "step": 0.1,
+      "label": "Overlay opacity",
+      "default": 0.4
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "INTRODUCING"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Get Up & Down Golf"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Premium golf apparel and accessories that blend performance and lifestyle. Golf For the Culture.</p>"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "SHOP NOW"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "text",
+      "id": "secondary_button_label",
+      "label": "Secondary button label"
+    },
+    {
+      "type": "url",
+      "id": "secondary_button_link",
+      "label": "Secondary button link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero Section",
+      "category": "Hero"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,98 @@
+{
+  "general": {
+    "404": {
+      "title": "404 Page Not Found",
+      "subtext": "The page you requested does not exist.",
+      "message": "Sorry, we couldn't find the page you're looking for. Please try searching or return to our homepage.",
+      "search_placeholder": "Search our store...",
+      "back_to_home": "Back to Homepage",
+      "shop_now": "Shop Now"
+    },
+    "search": {
+      "title": "Search",
+      "placeholder": "Search our store",
+      "submit": "Search",
+      "no_results": "No results found for",
+      "results_for": "Results for",
+      "try_again": "Please try another search."
+    },
+    "cart": {
+      "title": "Shopping Cart",
+      "empty": "Your cart is currently empty.",
+      "subtotal": "Subtotal",
+      "checkout": "Checkout",
+      "continue_shopping": "Continue Shopping",
+      "item_added": "Item added to cart",
+      "remove": "Remove",
+      "update": "Update",
+      "quantity": "Quantity"
+    },
+    "newsletter": {
+      "email_placeholder": "Email address",
+      "submit": "Subscribe",
+      "success": "Thanks for subscribing!",
+      "confirmation": "Thanks for subscribing"
+    },
+    "accessibility": {
+      "skip_to_content": "Skip to content",
+      "close": "Close",
+      "menu": "Menu",
+      "search": "Search"
+    }
+  },
+  "templates": {
+    "contact": {
+      "form": {
+        "name": "Name",
+        "email": "Email",
+        "phone": "Phone",
+        "message": "Message",
+        "subject": "Subject",
+        "order_number": "Order Number",
+        "error_heading": "Please correct the following:",
+        "success": "Thanks for contacting us! We'll get back to you as soon as possible."
+      }
+    }
+  },
+  "layout": {
+    "header": {
+      "menu": "Menu",
+      "cart": "Cart",
+      "search": "Search"
+    },
+    "footer": {
+      "social_platform": "{{ name }} on {{ platform }}",
+      "copyright": "Copyright",
+      "payment_methods": "Payment methods accepted"
+    }
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Add to Cart",
+      "sold_out": "Sold Out",
+      "unavailable": "Unavailable",
+      "on_sale": "Sale",
+      "quantity": "Quantity",
+      "from_price_html": "From {{ price }}",
+      "regular_price": "Regular price",
+      "sale_price": "Sale price"
+    }
+  },
+  "collections": {
+    "general": {
+      "no_matches": "No products found in this collection",
+      "link_title": "Browse our {{ title }} collection"
+    },
+    "sorting": {
+      "title": "Sort by",
+      "featured": "Featured",
+      "best_selling": "Best Selling",
+      "az": "Alphabetically, A-Z",
+      "za": "Alphabetically, Z-A",
+      "price_ascending": "Price, low to high",
+      "price_descending": "Price, high to low",
+      "date_descending": "Date, new to old",
+      "date_ascending": "Date, old to new"
+    }
+  }
+} 

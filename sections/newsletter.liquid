@@ -1,0 +1,159 @@
+{% comment %}
+  Newsletter Section for Get Up & Down Golf Shopify Theme
+  - Collects email addresses for newsletter signup
+{% endcomment %}
+
+<div class="newsletter-section section" style="background-color: {{ section.settings.background_color }};">
+  <div class="container">
+    <div class="newsletter-wrapper" style="background-image: url('{{ section.settings.background_image | img_url: 'master' }}');">
+      <div class="newsletter-overlay" style="background-color: {{ section.settings.overlay_color }}; opacity: {{ section.settings.overlay_opacity }}"></div>
+      
+      <div class="newsletter-content">
+        {% if section.settings.title != blank %}
+          <h2 class="newsletter-title" style="color: {{ section.settings.text_color }};">{{ section.settings.title }}</h2>
+        {% endif %}
+        
+        {% if section.settings.text != blank %}
+          <div class="newsletter-text" style="color: {{ section.settings.text_color }};">
+            {{ section.settings.text }}
+          </div>
+        {% endif %}
+        
+        {% form 'customer', class: 'newsletter-form' %}
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          
+          <div class="newsletter-form-field">
+            <input
+              type="email"
+              name="contact[email]"
+              id="NewsletterEmail"
+              class="newsletter-input"
+              value="{% if customer %}{{ customer.email }}{% endif %}"
+              placeholder="{{ section.settings.placeholder }}"
+              required
+              aria-required="true"
+              autocorrect="off"
+              autocapitalize="off"
+              autocomplete="email"
+            >
+            <button type="submit" class="btn btn-primary newsletter-submit" name="commit">
+              {{ section.settings.button_label }}
+            </button>
+          </div>
+          
+          {% if form.posted_successfully? %}
+            <p class="newsletter-success">{{ 'general.newsletter_form.confirmation' | t }}</p>
+          {% endif %}
+          
+          {% if form.errors %}
+            <p class="newsletter-error">{{ form.errors.messages['email'] }}</p>
+          {% endif %}
+        {% endform %}
+        
+        {% if section.settings.show_social_icons %}
+          <div class="newsletter-social">
+            {% if settings.social_facebook_link != blank %}
+              <a href="{{ settings.social_facebook_link }}" class="social-link" target="_blank" rel="noopener" aria-label="Facebook">
+                {% render 'icon-facebook' %}
+              </a>
+            {% endif %}
+            
+            {% if settings.social_instagram_link != blank %}
+              <a href="{{ settings.social_instagram_link }}" class="social-link" target="_blank" rel="noopener" aria-label="Instagram">
+                {% render 'icon-instagram' %}
+              </a>
+            {% endif %}
+            
+            {% if settings.social_twitter_link != blank %}
+              <a href="{{ settings.social_twitter_link }}" class="social-link" target="_blank" rel="noopener" aria-label="Twitter">
+                {% render 'icon-twitter' %}
+              </a>
+            {% endif %}
+            
+            {% if settings.social_youtube_link != blank %}
+              <a href="{{ settings.social_youtube_link }}" class="social-link" target="_blank" rel="noopener" aria-label="YouTube">
+                {% render 'icon-youtube' %}
+              </a>
+            {% endif %}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Newsletter",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Subscribe to our newsletter"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Sign up for exclusive offers, original stories, events and more.</p>"
+    },
+    {
+      "type": "text",
+      "id": "placeholder",
+      "label": "Email placeholder text",
+      "default": "Your email"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Subscribe"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social_icons",
+      "label": "Show social icons",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#0A3B2D"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 1,
+      "step": 0.1,
+      "label": "Overlay opacity",
+      "default": 0.3
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#FFFFFF"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Newsletter",
+      "category": "Promotional"
+    }
+  ]
+}
+{% endschema %}
